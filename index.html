@@ -274,14 +274,6 @@
     padding: var(--sp-xs);
     border-top: 1px solid var(--hairline);
   }
-  .theme-card-num {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1.1px;
-    text-transform: uppercase;
-    color: var(--body);
-    margin-bottom: 4px;
-  }
   .theme-card-name {
     font-family: var(--font);
     font-size: 18px;
@@ -331,13 +323,6 @@
     margin: var(--sp-md) 0 var(--sp-sm);
     padding-bottom: var(--sp-xs);
     border-bottom: 1px solid var(--hairline);
-  }
-  .panel-eyebrow {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1.1px;
-    text-transform: uppercase;
-    margin-bottom: var(--sp-xxs);
   }
   .panel-title {
     font-family: var(--font);
@@ -427,7 +412,15 @@
     color: var(--body);
     border-top: 1px solid var(--hairline);
   }
-  .verse-text .badge-pill { margin-top: var(--sp-xs); }
+
+  .translation-notice {
+    margin: var(--sp-sm) auto 0;
+    max-width: 560px;
+    text-align: center;
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
 
   @media (max-width: 420px) {
     .theme-grid { grid-template-columns: 1fr 1fr; }
@@ -478,6 +471,8 @@
     <p class="subscribe-text">Subscribe to Progress and Perfection, a recovery-themed, Christian-flavored daily reflection</p>
     <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="8a24cf25-a181-44c7-a2c6-5a18144d1e4d"></script>
   </div>
+
+  <p class="translation-notice">Unless noted otherwise, verses are quoted from The Holy Bible, English Standard Version&reg; (ESV&reg;), copyright &copy; 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. Some passages are quoted from the New International Version&reg; (NIV&reg;), copyright &copy; 1973, 1978, 1984, 2011 by Biblica, Inc.&trade; Used by permission.</p>
 
 </div>
 
@@ -568,7 +563,6 @@
       card.innerHTML = `
         <div class="card-top"></div>
         <div class="card-bottom">
-          <div class="theme-card-num">${String(si + 1).padStart(2, '0')}</div>
           <div class="theme-card-name">${section.name}</div>
           <div class="theme-card-range">${range}</div>
         </div>
@@ -588,12 +582,7 @@
       <div class="verse-top"></div>
       <div class="verse-date">${v.date}</div>
       <div class="verse-anchor">${v.anchor}<span class="ref">${v.ref}</span></div>
-      <div class="verse-text-inner">
-        <div class="verse-text">
-          ${v.words.join(' ')}
-          <span class="badge-pill">${v.translation}</span>
-        </div>
-      </div>
+      <div class="verse-text-inner"><div class="verse-text">${v.words.join(' ')}</div></div>
     `;
     card.addEventListener('click', () => {
       const wasOpen = card.classList.contains('is-open');
@@ -628,7 +617,6 @@
         </div>
       </div>
       <div class="panel-header">
-        <div class="panel-eyebrow" style="color:${accent}">${String(si + 1).padStart(2, '0')}</div>
         <h2 class="panel-title">${section.name}</h2>
       </div>
       <div class="verse-grid"></div>
