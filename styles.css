@@ -76,22 +76,6 @@ button {
 
 /* shared components */
 
-.badge-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-xxxs);
-  background: var(--canvas-elevated);
-  color: var(--ink);
-  font-family: var(--font);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1.1px;
-  text-transform: uppercase;
-  border-radius: 9999px;
-  padding: 4px 12px;
-  white-space: nowrap;
-}
-
 .button-primary {
   background: var(--primary);
   color: var(--on-primary);
