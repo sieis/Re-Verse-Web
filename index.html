@@ -1,21 +1,306 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>P&amp;P Memory</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="theme-color" content="#F2E9D8" id="theme-meta">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scripture Memory — Progress &amp; Perfection</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+
+  .wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--sp-xl) var(--sp-xs) var(--sp-xxl);
+  }
+
+  header.page-head {
+    margin-bottom: var(--sp-xxl);
+  }
+
+  .eyebrow {
+    font-family: var(--font);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: var(--primary);
+  }
+
+  h1 {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: clamp(34px, 6vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.9px;
+    margin: var(--sp-xxs) 0 var(--sp-xs);
+  }
+
+  .page-head p {
+    color: var(--body);
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 46ch;
+    margin: 0;
+  }
+
+  section.theme {
+    margin-bottom: var(--sp-md);
+  }
+
+  .theme-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-xs);
+    padding: var(--sp-xxs) 0;
+    margin-bottom: var(--sp-xxxs);
+    border-bottom: 1px solid var(--hairline);
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+  }
+
+  .theme-head:hover .theme-name,
+  .theme-head:focus-visible .theme-name {
+    color: var(--primary);
+  }
+
+  .theme-num {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .theme-name {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: clamp(20px, 3vw, 26px);
+    letter-spacing: -0.2px;
+    transition: color 0.15s ease;
+  }
+
+  .theme-range {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .theme-chevron {
+    margin-left: auto;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    color: var(--muted);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  section.theme.open .theme-chevron {
+    transform: rotate(90deg);
+  }
+
+  ol.verses {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+  }
+
+  section.theme.open ol.verses {
+    max-height: 2000px;
+  }
+
+  .verse-row {
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    align-items: center;
+    gap: var(--sp-xs);
+    padding: var(--sp-xs) var(--sp-xxxs);
+    border-bottom: 1px solid var(--hairline);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s ease;
+  }
+
+  a.verse-row:hover,
+  a.verse-row:focus-visible {
+    background: var(--canvas-elevated);
+  }
+
+  .verse-row .date {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .verse-row .meta .anchor {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: 17px;
+    letter-spacing: -0.1px;
+    color: var(--ink);
+  }
+
+  .verse-row .meta .ref {
+    display: block;
+    font-size: 12.5px;
+    color: var(--body);
+    margin-top: 2px;
+  }
+
+  footer.social {
+    margin-top: var(--sp-xl);
+    padding-top: var(--sp-sm);
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-sm);
+  }
+
+  footer.social a {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    color: var(--body);
+    transition: color 0.15s ease;
+  }
+  footer.social a:hover,
+  footer.social a:focus-visible {
+    color: var(--primary);
+  }
+  footer.social svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .subscribe {
+    margin: var(--sp-sm) auto 0;
+    max-width: 420px;
+    text-align: center;
+  }
+
+  .subscribe-text {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--body);
+    margin: 0 0 var(--sp-xs);
+  }
+</style>
 </head>
 <body>
-  <div id="app"></div>
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+<div class="wrap">
+
+  <header class="page-head">
+    <div class="eyebrow">Progress &amp; Perfection</div>
+    <h1>Scripture Memory Challenge</h1>
+    <p>One passage, every week, all year.</p>
+  </header>
+
+  <main id="sections"></main>
+
+  <footer class="social">
+    <a href="https://x.com/EamonnCottrell" aria-label="X (Twitter)" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a href="https://www.youtube.com/@progressandperfection" aria-label="YouTube" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3.02 3.02 0 00-2.12-2.14C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.56A3.02 3.02 0 00.5 6.2 31.6 31.6 0 000 12a31.6 31.6 0 00.5 5.8 3.02 3.02 0 002.12 2.14c1.88.56 9.38.56 9.38.56s7.5 0 9.38-.56a3.02 3.02 0 002.12-2.14A31.6 31.6 0 0024 12a31.6 31.6 0 00-.5-5.8zM9.6 15.6V8.4l6.4 3.6z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/eamonncottrell/" aria-label="LinkedIn" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47zM5.34 7.43a2.07 2.07 0 110-4.13 2.07 2.07 0 010 4.13zM7.12 20.45H3.56V9h3.56z"/></svg>
+    </a>
+    <a href="https://github.com/sieis" aria-label="GitHub" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.75 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.9 10.9 0 015.73 0c2.19-1.49 3.15-1.18 3.15-1.18.63 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.67.8.56A10.52 10.52 0 0023.5 12c0-6.35-5.15-11.5-11.5-11.5z"/></svg>
+    </a>
+  </footer>
+
+  <div class="subscribe">
+    <p class="subscribe-text">Subscribe to Progress and Perfection, a recovery-themed, Christian-flavored daily reflection</p>
+    <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="8a24cf25-a181-44c7-a2c6-5a18144d1e4d"></script>
+  </div>
+
+</div>
+
+<script src="verses.js"></script>
+<script>
+  const sectionsEl = document.getElementById('sections');
+
+  const sections = [];
+  const bySection = {};
+  VERSES.forEach(v => {
+    if (!bySection[v.section]) {
+      bySection[v.section] = { name: v.section, verses: [] };
+      sections.push(bySection[v.section]);
+    }
+    bySection[v.section].verses.push(v);
+  });
+
+  sections.forEach((section, si) => {
+    const sec = document.createElement('section');
+    sec.className = 'theme';
+
+    const first = section.verses[0].date;
+    const last = section.verses[section.verses.length - 1].date;
+    const range = first.slice(0, 3) + ' – ' + last.slice(0, 3);
+
+    const head = document.createElement('button');
+    head.type = 'button';
+    head.className = 'theme-head';
+    head.setAttribute('aria-expanded', 'false');
+    head.innerHTML = `
+      <span class="theme-num">${String(si + 1).padStart(2, '0')}</span>
+      <span class="theme-name">${section.name}</span>
+      <span class="theme-range">${range}</span>
+      <span class="theme-chevron">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M7.5 4.5L14 10l-6.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    `;
+    head.addEventListener('click', () => {
+      const isOpen = sec.classList.toggle('open');
+      head.setAttribute('aria-expanded', String(isOpen));
+    });
+    sec.appendChild(head);
+
+    const ol = document.createElement('ol');
+    ol.className = 'verses';
+
+    section.verses.forEach(v => {
+      const li = document.createElement('li');
+      const row = document.createElement('a');
+      row.className = 'verse-row';
+      row.href = `study.html?v=${v.slug}`;
+
+      row.innerHTML = `
+        <span class="date">${v.date}</span>
+        <span class="meta">
+          <span class="anchor">${v.anchor}</span>
+          <span class="ref">${v.ref}</span>
+        </span>
+        <span class="badge-pill">Study</span>
+      `;
+
+      li.appendChild(row);
+      ol.appendChild(li);
+    });
+
+    sec.appendChild(ol);
+    sectionsEl.appendChild(sec);
+  });
+</script>
 </body>
 </html>
