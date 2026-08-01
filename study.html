@@ -80,6 +80,7 @@
     text-align: center;
     color: var(--ink);
     white-space: normal;
+    transition: font-size 0.2s ease;
   }
 
   .word {
@@ -365,6 +366,8 @@
     fitText();
   }
 
+  let wordEls = [];
+
   function render() {
     passageEl.innerHTML = VERSE.words.map((w, i) => {
       const { lead, core, trail } = splitWord(w);
@@ -374,7 +377,12 @@
         : `<span class="blank">${'_'.repeat(core.length)}</span>`;
       return `<span class="word${revealed ? ' revealed' : ''}" data-i="${i}">${lead}${body}${trail}</span> `;
     }).join('');
+    wordEls = [...passageEl.querySelectorAll('.word')];
 
+    updateProgress();
+  }
+
+  function updateProgress() {
     const doneCount = state.filter(Boolean).length;
     const pct = Math.round((doneCount / state.length) * 100);
     progressFill.style.width = pct + '%';
@@ -384,26 +392,53 @@
   function revealRandom(n) {
     const remaining = state.map((v, i) => v ? null : i).filter(v => v !== null);
     if (remaining.length === 0) return;
+    const picks = [];
     for (let k = 0; k < n && remaining.length; k++) {
       const pick = remaining.splice(Math.floor(Math.random() * remaining.length), 1)[0];
       state[pick] = true;
+      picks.push(pick);
     }
     hintEl.classList.add('hidden');
-    render();
-    fitText();
+
+    // Update only the newly revealed words in place so already-revealed
+    // words don't get torn down and replayed through the reveal animation.
+    picks.forEach((i, order) => {
+      const { lead, core, trail } = splitWord(VERSE.words[i]);
+      const el = wordEls[i];
+      el.innerHTML = `${lead}${core}${trail}`;
+      el.style.animationDelay = `${order * 45}ms`;
+      el.classList.add('revealed');
+    });
+
+    updateProgress();
+    shrinkToFit();
   }
 
   // ---------- dynamic font size: start big, shrink to fit the viewport ----------
-  function fitText() {
+  function fits() {
     const zone = passageZone;
+    return passageEl.scrollWidth <= zone.clientWidth - 4 &&
+      document.querySelector('.passage-inner').scrollHeight <= zone.clientHeight - 4;
+  }
+
+  // Full reset: used on verse load / viewport resize, where a size jump is expected.
+  function fitText() {
     const maxByViewport = Math.min(window.innerWidth * 0.085, 88);
     let size = Math.max(maxByViewport, 22);
     passageEl.style.fontSize = size + 'px';
 
-    const fits = () =>
-      passageEl.scrollWidth <= zone.clientWidth - 4 &&
-      document.querySelector('.passage-inner').scrollHeight <= zone.clientHeight - 4;
+    let guard = 0;
+    while (!fits() && size > 14 && guard < 60) {
+      size -= 2;
+      passageEl.style.fontSize = size + 'px';
+      guard++;
+    }
+  }
 
+  // Shrink-only check: used after revealing words, so the text never snaps
+  // back up to its max size mid-tap — it only nudges down if it no longer fits.
+  function shrinkToFit() {
+    let size = parseFloat(passageEl.style.fontSize) || 22;
     let guard = 0;
     while (!fits() && size > 14 && guard < 60) {
       size -= 2;

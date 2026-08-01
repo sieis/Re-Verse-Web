@@ -124,7 +124,7 @@
 
   .verse-row {
     display: grid;
-    grid-template-columns: 72px 1fr auto;
+    grid-template-columns: 72px 1fr;
     align-items: center;
     gap: var(--sp-xs);
     padding: var(--sp-xs) var(--sp-xxxs);
@@ -531,7 +531,6 @@
           <span class="anchor">${v.anchor}</span>
           <span class="ref">${v.ref}</span>
         </span>
-        <span class="badge-pill">Study</span>
       `;
 
       li.appendChild(row);
