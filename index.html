@@ -201,6 +201,238 @@
     color: var(--body);
     margin: 0 0 var(--sp-xs);
   }
+
+  /* ---------- view toggle ---------- */
+  .view-toggle {
+    display: inline-flex;
+    border: 1px solid var(--hairline);
+    background: var(--canvas-elevated);
+    margin-top: var(--sp-xs);
+  }
+  .view-toggle button {
+    padding: 10px 20px;
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--body);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .view-toggle button:hover { color: var(--ink); }
+  .view-toggle button.is-active {
+    background: var(--ink);
+    color: var(--canvas);
+  }
+  .view-toggle .divider {
+    width: 1px;
+    background: var(--hairline);
+  }
+
+  .scene[hidden] { display: none !important; }
+
+  /* ---------- flashcards: theme grid ---------- */
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--sp-xs);
+  }
+  .theme-grid[hidden] { display: none; }
+
+  .theme-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--canvas-elevated);
+    cursor: pointer;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    width: 100%;
+    transition: transform 0.18s ease;
+  }
+  .theme-card:hover { transform: translateY(-2px); }
+  .theme-card:active { transform: translateY(0); }
+
+  .theme-card .card-top {
+    flex: 1 1 55%;
+    background: var(--accent, var(--canvas-elevated));
+    position: relative;
+  }
+  .theme-card .card-top::after {
+    content: "";
+    position: absolute;
+    bottom: var(--sp-xs);
+    left: var(--sp-xs);
+    width: 24px;
+    height: 1px;
+    background: rgba(255,255,255,0.6);
+  }
+  .theme-card .card-bottom {
+    flex: 0 0 auto;
+    padding: var(--sp-xs);
+    border-top: 1px solid var(--hairline);
+  }
+  .theme-card-num {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: var(--body);
+    margin-bottom: 4px;
+  }
+  .theme-card-name {
+    font-family: var(--font);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .theme-card-range {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 0.4px;
+  }
+
+  /* ---------- flashcards: panel ---------- */
+  .panel-toolbar {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--sp-sm);
+  }
+  .panel-nav {
+    display: inline-flex;
+    align-items: stretch;
+    gap: var(--sp-xxs);
+  }
+  .nav-link, .back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--ink);
+    padding: 10px 16px;
+    border: 1px solid var(--ink);
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .nav-link { min-width: 40px; padding: 10px; }
+  .nav-link:hover:not(:disabled), .back-link:hover { background: var(--ink); color: var(--canvas); }
+  .nav-link:disabled { opacity: 0.25; cursor: not-allowed; }
+
+  .panel-header {
+    margin: var(--sp-md) 0 var(--sp-sm);
+    padding-bottom: var(--sp-xs);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .panel-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    margin-bottom: var(--sp-xxs);
+  }
+  .panel-title {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: clamp(24px, 4vw, 34px);
+    letter-spacing: -0.4px;
+    line-height: 1.15;
+  }
+
+  /* ---------- flashcards: verse cards ---------- */
+  .verse-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--sp-xs);
+    align-items: start;
+  }
+  .verse-card {
+    background: var(--canvas-elevated);
+    border: 1px solid var(--hairline);
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .verse-card:hover { transform: translateY(-2px); }
+  .verse-card.is-open { border-color: var(--accent, var(--primary)); }
+  .verse-card.is-open .verse-top { height: 28px; }
+
+  .verse-top {
+    height: 96px;
+    background: var(--accent, var(--canvas-elevated));
+    position: relative;
+    transition: height 0.32s ease;
+  }
+  .verse-top::after {
+    content: "";
+    position: absolute;
+    bottom: var(--sp-xxs);
+    left: var(--sp-xs);
+    width: 18px;
+    height: 1px;
+    background: rgba(255,255,255,0.55);
+  }
+  .verse-date {
+    padding: var(--sp-xs) var(--sp-xs) 0;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .verse-anchor {
+    padding: 4px var(--sp-xs) var(--sp-xs);
+    font-family: var(--font);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .verse-anchor .ref {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--body);
+    margin-top: 2px;
+  }
+
+  /* CSS-only accordion via grid-template-rows; minmax(0, …) required so the
+     closed row doesn't floor at one line of text (plain 0fr = minmax(auto,0fr)). */
+  .verse-text-inner {
+    display: grid;
+    grid-template-rows: minmax(0, 0fr);
+    overflow: hidden;
+    transition: grid-template-rows 0.32s ease;
+  }
+  .verse-card.is-open .verse-text-inner {
+    grid-template-rows: minmax(0, 1fr);
+  }
+  .verse-text-inner > .verse-text { min-height: 0; overflow: hidden; }
+  .verse-text {
+    padding: var(--sp-xs);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--body);
+    border-top: 1px solid var(--hairline);
+  }
+  .verse-text .badge-pill { margin-top: var(--sp-xs); }
+
+  @media (max-width: 420px) {
+    .theme-grid { grid-template-columns: 1fr 1fr; }
+    .verse-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -210,9 +442,22 @@
     <div class="eyebrow">Progress &amp; Perfection</div>
     <h1>Scripture Memory Challenge</h1>
     <p>One passage, every week, all year.</p>
+    <div class="view-toggle" id="viewToggle" role="group" aria-label="View mode">
+      <button type="button" data-view="reveal" aria-pressed="true">Reveal</button>
+      <div class="divider"></div>
+      <button type="button" data-view="flashcards" aria-pressed="false">Flashcards</button>
+    </div>
   </header>
 
-  <main id="sections"></main>
+  <main>
+    <div class="scene" id="revealScene">
+      <div id="sections"></div>
+    </div>
+    <div class="scene" id="flashcardScene" hidden>
+      <div class="theme-grid" id="themeGrid"></div>
+      <div class="panel-container" id="panelContainer"></div>
+    </div>
+  </main>
 
   <footer class="social">
     <a href="https://x.com/EamonnCottrell" aria-label="X (Twitter)" target="_blank" rel="noopener">
@@ -301,6 +546,137 @@
     sec.appendChild(ol);
     sectionsEl.appendChild(sec);
   });
+
+  // ---------- flashcards ----------
+  const THEME_COLORS = ['#da291c', '#c4561f', '#c8932f', '#a3a01f', '#6f8f3a', '#2d7048', '#1f7a8c', '#2855a8'];
+  const themeColor = (i) => THEME_COLORS[i % THEME_COLORS.length];
+
+  const themeGrid = document.getElementById('themeGrid');
+  const panelContainer = document.getElementById('panelContainer');
+
+  function renderThemeGrid() {
+    themeGrid.innerHTML = '';
+    sections.forEach((section, si) => {
+      const first = section.verses[0].date;
+      const last = section.verses[section.verses.length - 1].date;
+      const range = first.slice(0, 3) + ' – ' + last.slice(0, 3);
+
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'theme-card';
+      card.style.setProperty('--accent', themeColor(si));
+      card.innerHTML = `
+        <div class="card-top"></div>
+        <div class="card-bottom">
+          <div class="theme-card-num">${String(si + 1).padStart(2, '0')}</div>
+          <div class="theme-card-name">${section.name}</div>
+          <div class="theme-card-range">${range}</div>
+        </div>
+      `;
+      card.addEventListener('click', () => openTheme(si));
+      themeGrid.appendChild(card);
+    });
+  }
+
+  function renderVerseCard(v, accent) {
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'verse-card';
+    card.setAttribute('aria-expanded', 'false');
+    card.style.setProperty('--accent', accent);
+    card.innerHTML = `
+      <div class="verse-top"></div>
+      <div class="verse-date">${v.date}</div>
+      <div class="verse-anchor">${v.anchor}<span class="ref">${v.ref}</span></div>
+      <div class="verse-text-inner">
+        <div class="verse-text">
+          ${v.words.join(' ')}
+          <span class="badge-pill">${v.translation}</span>
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', () => {
+      const wasOpen = card.classList.contains('is-open');
+      panelContainer.querySelectorAll('.verse-card.is-open').forEach(c => {
+        c.classList.remove('is-open');
+        c.setAttribute('aria-expanded', 'false');
+      });
+      if (!wasOpen) {
+        card.classList.add('is-open');
+        card.setAttribute('aria-expanded', 'true');
+      }
+    });
+    return card;
+  }
+
+  function openTheme(si) {
+    const section = sections[si];
+    const accent = themeColor(si);
+    const prev = si > 0 ? si - 1 : null;
+    const next = si < sections.length - 1 ? si + 1 : null;
+
+    panelContainer.innerHTML = '';
+    const panel = document.createElement('section');
+    panel.className = 'panel';
+    panel.style.setProperty('--accent', accent);
+    panel.innerHTML = `
+      <div class="panel-toolbar">
+        <div class="panel-nav">
+          <button type="button" class="nav-link nav-prev" aria-label="Previous theme"${prev === null ? ' disabled' : ''}>&larr;</button>
+          <button type="button" class="back-link">All Themes</button>
+          <button type="button" class="nav-link nav-next" aria-label="Next theme"${next === null ? ' disabled' : ''}>&rarr;</button>
+        </div>
+      </div>
+      <div class="panel-header">
+        <div class="panel-eyebrow" style="color:${accent}">${String(si + 1).padStart(2, '0')}</div>
+        <h2 class="panel-title">${section.name}</h2>
+      </div>
+      <div class="verse-grid"></div>
+    `;
+
+    const grid = panel.querySelector('.verse-grid');
+    section.verses.forEach(v => grid.appendChild(renderVerseCard(v, accent)));
+
+    panel.querySelector('.back-link').addEventListener('click', closeTheme);
+    if (prev !== null) panel.querySelector('.nav-prev').addEventListener('click', () => openTheme(prev));
+    if (next !== null) panel.querySelector('.nav-next').addEventListener('click', () => openTheme(next));
+
+    panelContainer.appendChild(panel);
+    themeGrid.hidden = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function closeTheme() {
+    panelContainer.innerHTML = '';
+    themeGrid.hidden = false;
+  }
+
+  // ---------- view toggle ----------
+  const viewToggle = document.getElementById('viewToggle');
+  const revealScene = document.getElementById('revealScene');
+  const flashcardScene = document.getElementById('flashcardScene');
+
+  function setView(view) {
+    localStorage.setItem('re-verse-view', view);
+    [...viewToggle.querySelectorAll('button[data-view]')].forEach(btn => {
+      const active = btn.dataset.view === view;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-pressed', String(active));
+    });
+    revealScene.hidden = view !== 'reveal';
+    flashcardScene.hidden = view !== 'flashcards';
+    if (view === 'flashcards' && !themeGrid.children.length) {
+      renderThemeGrid();
+    }
+  }
+
+  viewToggle.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-view]');
+    if (!btn) return;
+    setView(btn.dataset.view);
+  });
+
+  setView(localStorage.getItem('re-verse-view') === 'flashcards' ? 'flashcards' : 'reveal');
 </script>
 </body>
 </html>
