@@ -1,0 +1,121 @@
+/* ============================================================
+   Progress & Perfection — Scripture Memory
+   Design language: Ferrari marketing-site editorial system.
+   Near-black cinematic canvas, Rosso Corsa used scarcely,
+   sharp 0px corners everywhere except pill badges, a single
+   sans family, uppercase tracked CTA/nav labels, explicit 8px
+   spacing ladder. FerrariSans is licensed — Inter is the
+   documented open-source substitute.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* brand + accent */
+  --primary: #da291c;          /* Rosso Corsa */
+  --primary-active: #b01e0a;
+  --primary-soft: rgba(218, 41, 28, 0.16);
+
+  /* surface */
+  --canvas: #181818;           /* near-black, never pure black */
+  --canvas-elevated: #303030;
+  --canvas-light: #ffffff;
+
+  /* hairlines */
+  --hairline: #303030;
+  --hairline-soft: #ebebeb;
+
+  /* text */
+  --ink: #ffffff;
+  --body: #969696;
+  --muted: #666666;
+  --muted-soft: #8f8f8f;
+  --on-primary: #ffffff;
+
+  /* spacing ladder (8px base) */
+  --sp-xxxs: 4px;
+  --sp-xxs: 8px;
+  --sp-xs: 16px;
+  --sp-sm: 24px;
+  --sp-md: 32px;
+  --sp-lg: 48px;
+  --sp-xl: 64px;
+  --sp-xxl: 96px;
+  --sp-super: 128px;
+
+  --font: 'Inter', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--accent-yellow, #f6e500);
+  outline-offset: 2px;
+}
+
+/* shared components */
+
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-xxxs);
+  background: var(--canvas-elevated);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  padding: 4px 12px;
+  white-space: nowrap;
+}
+
+.button-primary {
+  background: var(--primary);
+  color: var(--on-primary);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 0;
+  padding: 14px 32px;
+  cursor: pointer;
+}
+.button-primary:active { background: var(--primary-active); }
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--body);
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  border-radius: 0;
+}
+.icon-btn:hover, .icon-btn:focus-visible {
+  color: var(--ink);
+  background: var(--canvas-elevated);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

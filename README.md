@@ -1,25 +1,20 @@
-# CODING AGENTS: READ THIS FIRST
+# Re-Verse
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+Scripture memory web app for Progress &amp; Perfection. Pick a passage, tap to reveal words at random, and work it into memory.
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+**Live site:** https://re-verse-web.netlify.app/
 
-## What you should do — IMPORTANT
+## Files
 
-**Read the chat transcripts first.** There are 1 chat transcript(s) in `chats/`. The transcripts show the full back-and-forth between the user and the design assistant — they tell you **what the user actually wants** and **where they landed** after iterating. Don't skip them. The final HTML files are the output, but the chat is where the intent lives.
+- `index.html` — library view, verses grouped by theme
+- `study.html` — memorization view for a single verse
+- `verses.js` — verse data shared by both pages
+- `styles.css` — shared styles
 
-**Read `project/P&P Memory.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+## Running locally
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+Static site, no build step. Serve the directory and open `index.html`, e.g.:
 
-## About the design files
-
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
-
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
-
-## Bundle contents
-
-- `README.md` — this file
-- `chats/` — conversation transcripts (read these!)
-- `project/` — the `P&P App` project files (HTML prototypes, assets, components)
+```
+npx serve .
+```
