@@ -80,7 +80,6 @@
     text-align: center;
     color: var(--ink);
     white-space: normal;
-    transition: font-size 0.2s ease;
   }
 
   .word {
@@ -528,6 +527,15 @@
   // init
   [...segmented.children][1].classList.add('active');
   loadVerse(index);
+
+  // Inter loads asynchronously (see styles.css); the very first fitText()
+  // pass above measures against the fallback font's metrics. Re-fit once
+  // the real font is ready so text can grow back to the size Inter
+  // actually needs, instead of staying shrunk for a font that's no
+  // longer being rendered.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(fitText);
+  }
 </script>
 </body>
 </html>
