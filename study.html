@@ -111,19 +111,6 @@
     color: var(--ink);
     text-align: center;
   }
-  .reference-line .translation {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1.1px;
-    text-transform: uppercase;
-    color: var(--primary);
-    background: var(--canvas-elevated);
-    border-radius: 9999px;
-    padding: 3px 10px;
-    margin-left: 8px;
-    vertical-align: middle;
-  }
-
   .hint {
     display: block;
     margin-top: var(--sp-xs);
@@ -370,7 +357,7 @@
     VERSE = VERSES[index];
     state = VERSE.words.map(() => false);
     anchorTag.textContent = VERSE.anchor;
-    referenceLine.innerHTML = `${VERSE.ref} <span class="translation">${VERSE.translation}</span>`;
+    referenceLine.textContent = VERSE.ref;
     hintEl.classList.remove('hidden');
     prevBtn.disabled = index === 0;
     nextBtn.disabled = index === VERSES.length - 1;
