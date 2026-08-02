@@ -294,6 +294,7 @@
     align-items: center;
     margin-bottom: var(--sp-sm);
   }
+  .panel-toolbar[hidden] { display: none; }
   .panel-nav {
     display: inline-flex;
     align-items: stretch;
@@ -318,6 +319,13 @@
   .nav-link { min-width: 40px; padding: 10px; }
   .nav-link:hover:not(:disabled), .back-link:hover { background: var(--ink); color: var(--canvas); }
   .nav-link:disabled { opacity: 0.25; cursor: not-allowed; }
+  .back-link.is-active { background: var(--ink); color: var(--canvas); }
+  .back-link:disabled { cursor: default; }
+
+  .verse-section {
+    color: var(--muted);
+    font-weight: 600;
+  }
 
   .panel-header {
     margin: var(--sp-md) 0 var(--sp-sm);
@@ -447,6 +455,12 @@
       <div id="sections"></div>
     </div>
     <div class="scene" id="flashcardScene" hidden>
+      <div class="panel-toolbar" id="gridToolbar">
+        <div class="panel-nav">
+          <button type="button" class="back-link is-active" disabled>All Themes</button>
+          <button type="button" class="back-link" id="allVersesBtn">All Verses</button>
+        </div>
+      </div>
       <div class="theme-grid" id="themeGrid"></div>
       <div class="panel-container" id="panelContainer"></div>
     </div>
@@ -547,6 +561,13 @@
 
   const themeGrid = document.getElementById('themeGrid');
   const panelContainer = document.getElementById('panelContainer');
+  const gridToolbar = document.getElementById('gridToolbar');
+  const allVersesBtn = document.getElementById('allVersesBtn');
+
+  const sectionIndexBySlug = {};
+  sections.forEach((section, si) => {
+    section.verses.forEach(v => { sectionIndexBySlug[v.slug] = si; });
+  });
 
   function renderThemeGrid() {
     themeGrid.innerHTML = '';
@@ -571,7 +592,7 @@
     });
   }
 
-  function renderVerseCard(v, accent) {
+  function renderVerseCard(v, accent, sectionName) {
     const card = document.createElement('button');
     card.type = 'button';
     card.className = 'verse-card';
@@ -579,7 +600,7 @@
     card.style.setProperty('--accent', accent);
     card.innerHTML = `
       <div class="verse-top"></div>
-      <div class="verse-date">${v.date}</div>
+      <div class="verse-date">${v.date}${sectionName ? ` <span class="verse-section">&middot; ${sectionName}</span>` : ''}</div>
       <div class="verse-anchor">${v.anchor}<span class="ref">${v.ref}</span></div>
       <div class="verse-text-inner"><div class="verse-text">${v.words.join(' ')}</div></div>
     `;
@@ -611,7 +632,8 @@
       <div class="panel-toolbar">
         <div class="panel-nav">
           <button type="button" class="nav-link nav-prev" aria-label="Previous theme"${prev === null ? ' disabled' : ''}>&larr;</button>
-          <button type="button" class="back-link">All Themes</button>
+          <button type="button" class="back-link" data-action="all-themes">All Themes</button>
+          <button type="button" class="back-link" data-action="all-verses">All Verses</button>
           <button type="button" class="nav-link nav-next" aria-label="Next theme"${next === null ? ' disabled' : ''}>&rarr;</button>
         </div>
       </div>
@@ -624,19 +646,55 @@
     const grid = panel.querySelector('.verse-grid');
     section.verses.forEach(v => grid.appendChild(renderVerseCard(v, accent)));
 
-    panel.querySelector('.back-link').addEventListener('click', closeTheme);
+    panel.querySelector('[data-action="all-themes"]').addEventListener('click', closeTheme);
+    panel.querySelector('[data-action="all-verses"]').addEventListener('click', openAllVerses);
     if (prev !== null) panel.querySelector('.nav-prev').addEventListener('click', () => openTheme(prev));
     if (next !== null) panel.querySelector('.nav-next').addEventListener('click', () => openTheme(next));
 
     panelContainer.appendChild(panel);
     themeGrid.hidden = true;
+    gridToolbar.hidden = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function openAllVerses() {
+    panelContainer.innerHTML = '';
+    const panel = document.createElement('section');
+    panel.className = 'panel';
+    panel.innerHTML = `
+      <div class="panel-toolbar">
+        <div class="panel-nav">
+          <button type="button" class="back-link" data-action="all-themes">All Themes</button>
+          <button type="button" class="back-link is-active" disabled>All Verses</button>
+        </div>
+      </div>
+      <div class="panel-header">
+        <h2 class="panel-title">All Verses</h2>
+      </div>
+      <div class="verse-grid"></div>
+    `;
+
+    const grid = panel.querySelector('.verse-grid');
+    VERSES.forEach(v => {
+      const si = sectionIndexBySlug[v.slug];
+      grid.appendChild(renderVerseCard(v, themeColor(si), sections[si].name));
+    });
+
+    panel.querySelector('[data-action="all-themes"]').addEventListener('click', closeTheme);
+
+    panelContainer.appendChild(panel);
+    themeGrid.hidden = true;
+    gridToolbar.hidden = true;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function closeTheme() {
     panelContainer.innerHTML = '';
     themeGrid.hidden = false;
+    gridToolbar.hidden = false;
   }
+
+  allVersesBtn.addEventListener('click', openAllVerses);
 
   // ---------- view toggle ----------
   const viewToggle = document.getElementById('viewToggle');
