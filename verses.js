@@ -153,9 +153,9 @@ const VERSES = [
     words: ["But","the","one","who","looks","into","the","perfect","law,","the","law","of","liberty,","and","perseveres,","being","no","hearer","who","forgets","but","a","doer","who","acts,","he","will","be","blessed","in","his","doing."]
   },
   {
-    slug: "1-corinthians-15-57", date: "Jul 20", section: "Strength in Weakness",
-    ref: "1 Corinthians 15:57", anchor: "Sting", translation: "ESV",
-    words: ["But","thanks","be","to","God,","who","gives","us","the","victory","through","our","Lord","Jesus","Christ."]
+    slug: "1-corinthians-15-56-57", date: "Jul 20", section: "Strength in Weakness",
+    ref: "1 Corinthians 15:56-57", anchor: "Sting", translation: "ESV",
+    words: ["The","sting","of","death","is","sin,","and","the","power","of","sin","is","the","law.","But","thanks","be","to","God,","who","gives","us","the","victory","through","our","Lord","Jesus","Christ."]
   },
   {
     slug: "hebrews-4-12-13", date: "Jul 27", section: "Strength in Weakness",
