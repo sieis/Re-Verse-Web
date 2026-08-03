@@ -41,6 +41,24 @@
   .back:hover, .back:focus-visible { color: var(--ink); }
   .back svg { width: 16px; height: 16px; }
 
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-xxs);
+  }
+
+  .toggle-all-btn {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: var(--body);
+    padding: 8px 4px;
+    cursor: pointer;
+  }
+  .toggle-all-btn:hover, .toggle-all-btn:focus-visible { color: var(--ink); }
+  .toggle-all-btn.is-active { color: var(--primary); }
+
   #settingsBtn svg { width: 26px; height: 26px; }
 
   /* ---------- passage ---------- */
@@ -279,9 +297,12 @@
       <svg viewBox="0 0 12 12" fill="none"><path d="M7.5 2.5L3 6l4.5 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Library
     </a>
-    <button class="icon-btn" id="settingsBtn" aria-label="Settings">
-      <svg viewBox="0 0 20 20" fill="none"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" stroke="currentColor" stroke-width="1.3"/><path d="M16.2 12.4a1.2 1.2 0 00.25 1.32l.04.04a1.45 1.45 0 11-2.05 2.05l-.04-.04a1.2 1.2 0 00-1.32-.25 1.2 1.2 0 00-.73 1.1v.12a1.45 1.45 0 11-2.9 0v-.06a1.2 1.2 0 00-.78-1.1 1.2 1.2 0 00-1.32.25l-.04.04a1.45 1.45 0 11-2.05-2.05l.04-.04a1.2 1.2 0 00.25-1.32 1.2 1.2 0 00-1.1-.73h-.12a1.45 1.45 0 110-2.9h.06a1.2 1.2 0 001.1-.78 1.2 1.2 0 00-.25-1.32l-.04-.04A1.45 1.45 0 115.2 3.5l.04.04a1.2 1.2 0 001.32.25h.06a1.2 1.2 0 00.73-1.1v-.12a1.45 1.45 0 112.9 0v.06a1.2 1.2 0 00.73 1.1 1.2 1.2 0 001.32-.25l.04-.04a1.45 1.45 0 112.05 2.05l-.04.04a1.2 1.2 0 00-.25 1.32v.06a1.2 1.2 0 001.1.73h.12a1.45 1.45 0 110 2.9h-.06a1.2 1.2 0 00-1.1.73z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
-    </button>
+    <div class="topbar-actions">
+      <button class="toggle-all-btn" id="toggleAllBtn" type="button" aria-pressed="false">Show All</button>
+      <button class="icon-btn" id="settingsBtn" aria-label="Settings">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" stroke="currentColor" stroke-width="1.3"/><path d="M16.2 12.4a1.2 1.2 0 00.25 1.32l.04.04a1.45 1.45 0 11-2.05 2.05l-.04-.04a1.2 1.2 0 00-1.32-.25 1.2 1.2 0 00-.73 1.1v.12a1.45 1.45 0 11-2.9 0v-.06a1.2 1.2 0 00-.78-1.1 1.2 1.2 0 00-1.32.25l-.04.04a1.45 1.45 0 11-2.05-2.05l.04-.04a1.2 1.2 0 00.25-1.32 1.2 1.2 0 00-1.1-.73h-.12a1.45 1.45 0 110-2.9h.06a1.2 1.2 0 001.1-.78 1.2 1.2 0 00-.25-1.32l-.04-.04A1.45 1.45 0 115.2 3.5l.04.04a1.2 1.2 0 001.32.25h.06a1.2 1.2 0 00.73-1.1v-.12a1.45 1.45 0 112.9 0v.06a1.2 1.2 0 00.73 1.1 1.2 1.2 0 001.32-.25l.04-.04a1.45 1.45 0 112.05 2.05l-.04.04a1.2 1.2 0 00-.25 1.32v.06a1.2 1.2 0 001.1.73h.12a1.45 1.45 0 110 2.9h-.06a1.2 1.2 0 00-1.1.73z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
   </div>
 
   <div class="passage-zone" id="passageZone" role="button" tabindex="0" aria-label="Tap to reveal a word">
@@ -345,6 +366,7 @@
   const progressLabel = document.getElementById('progressLabel');
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
+  const toggleAllBtn = document.getElementById('toggleAllBtn');
 
   // token = optional lead punctuation + letters/hyphens/apostrophes (core) + optional trail punctuation
   function splitWord(w) {
@@ -379,6 +401,7 @@
     wordEls = [...passageEl.querySelectorAll('.word')];
 
     updateProgress();
+    updateToggleAllBtn();
   }
 
   function updateProgress() {
@@ -386,6 +409,21 @@
     const pct = Math.round((doneCount / state.length) * 100);
     progressFill.style.width = pct + '%';
     progressLabel.textContent = `${doneCount}/${state.length}`;
+  }
+
+  function updateToggleAllBtn() {
+    const allRevealed = state.length > 0 && state.every(Boolean);
+    toggleAllBtn.textContent = allRevealed ? 'Hide All' : 'Show All';
+    toggleAllBtn.classList.toggle('is-active', allRevealed);
+    toggleAllBtn.setAttribute('aria-pressed', String(allRevealed));
+  }
+
+  function toggleAll() {
+    const allRevealed = state.every(Boolean);
+    state = state.map(() => !allRevealed);
+    hintEl.classList.add('hidden');
+    render();
+    fitText();
   }
 
   function revealRandom(n) {
@@ -410,6 +448,7 @@
     });
 
     updateProgress();
+    updateToggleAllBtn();
     shrinkToFit();
   }
 
@@ -504,6 +543,8 @@
     sheet.classList.remove('open');
     backdrop.classList.remove('open');
   }
+
+  toggleAllBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleAll(); });
 
   settingsBtn.addEventListener('click', (e) => { e.stopPropagation(); openSheet(); });
   backdrop.addEventListener('click', closeSheet);
