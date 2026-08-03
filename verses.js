@@ -161,5 +161,10 @@ const VERSES = [
     slug: "hebrews-4-12-13", date: "Jul 27", section: "Strength in Weakness",
     ref: "Hebrews 4:12-13", anchor: "Activate", translation: "ESV",
     words: ["For","the","word","of","God","is","living","and","active,","sharper","than","any","two-edged","sword,","piercing","to","the","division","of","soul","and","of","spirit,","of","joints","and","of","marrow,","and","discerning","the","thoughts","and","intentions","of","the","heart.","And","no","creature","is","hidden","from","his","sight,","but","all","are","naked","and","exposed","to","the","eyes","of","him","to","whom","we","must","give","account."]
+  },
+  {
+    slug: "1-peter-5-6-7", date: "Aug 03", section: "Strength in Weakness",
+    ref: "1 Peter 5:6-7", anchor: "Humble", translation: "ESV",
+    words: ["Humble","yourselves,","therefore,","under","the","mighty","hand","of","God","so","that","at","the","proper","time","he","may","exalt","you,","casting","all","your","anxieties","on","him,","because","he","cares","for","you."]
   }
 ];
