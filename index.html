@@ -504,9 +504,12 @@
     bySection[v.section].verses.push(v);
   });
 
+  const sectionEls = [];
+
   sections.forEach((section, si) => {
     const sec = document.createElement('section');
     sec.className = 'theme';
+    sectionEls.push(sec);
 
     const first = section.verses[0].date;
     const last = section.verses[section.verses.length - 1].date;
@@ -525,8 +528,14 @@
       </span>
     `;
     head.addEventListener('click', () => {
-      const isOpen = sec.classList.toggle('open');
-      head.setAttribute('aria-expanded', String(isOpen));
+      const willOpen = !sec.classList.contains('open');
+      sectionEls.forEach(other => {
+        if (other === sec) return;
+        other.classList.remove('open');
+        other.querySelector('.theme-head').setAttribute('aria-expanded', 'false');
+      });
+      sec.classList.toggle('open', willOpen);
+      head.setAttribute('aria-expanded', String(willOpen));
     });
     sec.appendChild(head);
 
