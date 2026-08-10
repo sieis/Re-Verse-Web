@@ -166,5 +166,10 @@ const VERSES = [
     slug: "1-peter-5-6-7", date: "Aug 03", section: "Strength in Weakness",
     ref: "1 Peter 5:6-7", anchor: "Humble", translation: "ESV",
     words: ["Humble","yourselves,","therefore,","under","the","mighty","hand","of","God","so","that","at","the","proper","time","he","may","exalt","you,","casting","all","your","anxieties","on","him,","because","he","cares","for","you."]
+  },
+  {
+    slug: "psalm-31-24", date: "Aug 10", section: "Strength in Weakness",
+    ref: "Psalm 31:24", anchor: "Heart", translation: "ESV",
+    words: ["Be","strong,","and","let","your","heart","take","courage,","all","you","who","wait","for","the","LORD!"]
   }
 ];
