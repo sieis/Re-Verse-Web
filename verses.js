@@ -171,5 +171,10 @@ const VERSES = [
     slug: "psalm-31-24", date: "Aug 10", section: "Strength in Weakness",
     ref: "Psalm 31:24", anchor: "Heart", translation: "ESV",
     words: ["Be","strong,","and","let","your","heart","take","courage,","all","you","who","wait","for","the","LORD!"]
+  },
+  {
+    slug: "lamentations-3-22-24", date: "Aug 17", section: "Renewal",
+    ref: "Lamentations 3:22-24", anchor: "Mercies", translation: "ESV",
+    words: ["The","steadfast","love","of","the","LORD","never","ceases;","his","mercies","never","come","to","an","end;","they","are","new","every","morning;","great","is","your","faithfulness.","“The","LORD","is","my","portion,”","says","my","soul,","“therefore","I","will","hope","in","him.”"]
   }
 ];
