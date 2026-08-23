@@ -176,5 +176,10 @@ const VERSES = [
     slug: "lamentations-3-22-24", date: "Aug 17", section: "Renewal",
     ref: "Lamentations 3:22-24", anchor: "Mercies", translation: "ESV",
     words: ["The","steadfast","love","of","the","LORD","never","ceases;","his","mercies","never","come","to","an","end;","they","are","new","every","morning;","great","is","your","faithfulness.","“The","LORD","is","my","portion,”","says","my","soul,","“therefore","I","will","hope","in","him.”"]
+  },
+  {
+    slug: "romans-12-2", date: "Aug 24", section: "Renewal",
+    ref: "Romans 12:2", anchor: "Transform", translation: "ESV",
+    words: ["Do","not","be","conformed","to","this","world,","but","be","transformed","by","the","renewal","of","your","mind,","that","by","testing","you","may","discern","what","is","the","will","of","God,","what","is","good","and","acceptable","and","perfect."]
   }
 ];
