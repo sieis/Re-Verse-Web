@@ -181,5 +181,10 @@ const VERSES = [
     slug: "romans-12-2", date: "Aug 24", section: "Renewal",
     ref: "Romans 12:2", anchor: "Transform", translation: "ESV",
     words: ["Do","not","be","conformed","to","this","world,","but","be","transformed","by","the","renewal","of","your","mind,","that","by","testing","you","may","discern","what","is","the","will","of","God,","what","is","good","and","acceptable","and","perfect."]
+  },
+  {
+    slug: "titus-3-5", date: "Aug 31", section: "Renewal",
+    ref: "Titus 3:5", anchor: "Renewal", translation: "ESV",
+    words: ["he","saved","us,","not","because","of","works","done","by","us","in","righteousness,","but","according","to","his","own","mercy,","by","the","washing","of","regeneration","and","renewal","of","the","Holy","Spirit,"]
   }
 ];
