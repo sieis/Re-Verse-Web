@@ -186,5 +186,10 @@ const VERSES = [
     slug: "titus-3-4-5", date: "Aug 31", section: "Renewal",
     ref: "Titus 3:4-5", anchor: "Renewal", translation: "ESV",
     words: ["But","when","the","goodness","and","loving","kindness","of","God","our","Savior","appeared,","he","saved","us,","not","because","of","works","done","by","us","in","righteousness,","but","according","to","his","own","mercy,","by","the","washing","of","regeneration","and","renewal","of","the","Holy","Spirit,"]
+  },
+  {
+    slug: "jeremiah-33-2-3", date: "Sep 07", section: "Renewal",
+    ref: "Jeremiah 33:2-3", anchor: "Plead", translation: "ESV",
+    words: ["Thus","says","the","LORD","who","made","the","earth,","the","LORD","who","formed","it","to","establish","it—","the","LORD","is","his","name:","Call","to","me,","and","I","will","answer","you,","and","will","tell","you","great","and","hidden","things","that","you","have","not","known."]
   }
 ];
