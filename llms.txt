@@ -1,0 +1,19 @@
+# Re-Verse
+
+> Re-Verse is a scripture memory app for [Progress & Perfection](https://progressandperfection.com). Pick a verse, and it hides the words one at a time so you can practice recalling them from memory.
+
+Re-Verse is a static, client-rendered site (no build step, no backend). `index.html` is the verse library, `study.html` is the practice view driven by a `?v=` query param, and `verses.js` holds the verse data consumed by both pages. Live site: https://re-verse-web.netlify.app/
+
+## Docs
+
+- [README](https://raw.githubusercontent.com/sieis/re-verse-web/main/README.md): project overview and usage instructions
+
+## Site
+
+- [Library](https://re-verse-web.netlify.app/): browse verses by theme
+- [Study view](https://re-verse-web.netlify.app/study.html): practice recalling a verse from memory (append `?v=<verse-slug>`, e.g. `?v=psalm-119-11`)
+- [Sitemap](https://re-verse-web.netlify.app/sitemap.xml): full list of verse study pages
+
+## Optional
+
+- [robots.txt](https://re-verse-web.netlify.app/robots.txt): crawler access rules
