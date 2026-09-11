@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Scripture Memory — Progress &amp; Perfection</title>
+<meta name="description" content="One passage, every week, all year. A free scripture memory tool: pick a Bible verse, tap to reveal words at random, and work it into memory.">
+<link rel="canonical" href="https://re-verse-web.netlify.app/">
+<meta name="theme-color" content="#181818">
 <meta property="og:title" content="Scripture Memory — Progress &amp; Perfection">
 <meta property="og:description" content="One passage, every week, all year.">
 <meta property="og:type" content="website">
@@ -508,6 +511,26 @@
 
 <script src="verses.js"></script>
 <script>
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Scripture Memory — Progress & Perfection",
+    "description": "One passage, every week, all year. A free scripture memory tool: pick a Bible verse, tap to reveal words at random, and work it into memory.",
+    "url": "https://re-verse-web.netlify.app/",
+    "hasPart": VERSES.map(v => ({
+      "@type": "Quotation",
+      "name": v.anchor,
+      "text": v.words.join(' '),
+      "citation": v.ref,
+      "inLanguage": "en",
+      "url": `https://re-verse-web.netlify.app/study.html?v=${v.slug}`
+    }))
+  };
+  const ldScript = document.createElement('script');
+  ldScript.type = 'application/ld+json';
+  ldScript.textContent = JSON.stringify(structuredData);
+  document.head.appendChild(ldScript);
+
   const sectionsEl = document.getElementById('sections');
 
   const sections = [];

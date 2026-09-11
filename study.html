@@ -4,6 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Scripture Memory — Study</title>
+<meta name="description" content="Tap to reveal words at random and work a Bible verse into memory.">
+<meta name="theme-color" content="#181818">
+<meta property="og:title" content="Scripture Memory — Study">
+<meta property="og:description" content="Tap to reveal words at random and work a Bible verse into memory.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://re-verse-web.netlify.app/my-favicon/twitterimg.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Scripture Memory — Study">
+<meta name="twitter:description" content="Tap to reveal words at random and work a Bible verse into memory.">
+<meta name="twitter:image" content="https://re-verse-web.netlify.app/my-favicon/twitterimg.png">
+<link rel="icon" type="image/png" href="/my-favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/my-favicon/favicon.svg" />
+<link rel="shortcut icon" href="/my-favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/my-favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/my-favicon/site.webmanifest" />
 <link rel="stylesheet" href="styles.css">
 <style>
 
@@ -374,6 +391,10 @@
     return m ? { lead: m[1], core: m[2], trail: m[3] } : { lead: '', core: w, trail: '' };
   }
 
+  const ldScript = document.createElement('script');
+  ldScript.type = 'application/ld+json';
+  document.head.appendChild(ldScript);
+
   function loadVerse(i) {
     index = i;
     VERSE = VERSES[index];
@@ -383,6 +404,16 @@
     hintEl.classList.remove('hidden');
     prevBtn.disabled = index === 0;
     nextBtn.disabled = index === VERSES.length - 1;
+    document.title = `${VERSE.ref} — Scripture Memory`;
+    ldScript.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Quotation",
+      "name": VERSE.anchor,
+      "text": VERSE.words.join(' '),
+      "citation": VERSE.ref,
+      "inLanguage": "en",
+      "url": `https://re-verse-web.netlify.app/study.html?v=${VERSE.slug}`
+    });
     render();
     fitText();
   }
