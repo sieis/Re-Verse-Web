@@ -227,9 +227,6 @@
     margin: 0 0 var(--sp-xs);
   }
 
-  .subscribe-fallback { font-size: 13px; color: var(--body); }
-  .subscribe-status { font-size: 13px; color: var(--body); }
-
   /* ---------- view toggle ---------- */
   .view-toggle {
     display: inline-flex;
@@ -511,10 +508,7 @@
 
   <div class="subscribe">
     <p class="subscribe-text">Subscribe to Progress and Perfection, a recovery-themed, Christian-flavored daily reflection</p>
-    <button type="button" class="button-primary" id="subscribeBtn" aria-controls="subscribeForm" aria-expanded="false">Subscribe</button>
-    <div id="subscribeForm"></div>
-    <p class="subscribe-status" id="subscribeStatus" role="status"></p>
-    <p class="subscribe-fallback"><a href="https://progressandperfection.com/subscribe">Subscribe on Progress and Perfection</a></p>
+    <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="8a24cf25-a181-44c7-a2c6-5a18144d1e4d"></script>
   </div>
 
   <p class="translation-notice">Unless noted otherwise, verses are quoted from The Holy Bible, English Standard Version&reg; (ESV&reg;), copyright &copy; 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. Some passages are quoted from the New International Version&reg; (NIV&reg;), copyright &copy; 1973, 1978, 1984, 2011 by Biblica, Inc.&trade; Used by permission.</p>
@@ -522,27 +516,6 @@
 </div>
 
 <script>
-  // Load the embedded form only when requested. The direct link works even
-  // when JavaScript or the third-party form is unavailable.
-  document.getElementById('subscribeBtn').addEventListener('click', (event) => {
-    const button = event.currentTarget;
-    const status = document.getElementById('subscribeStatus');
-    button.disabled = true;
-    button.setAttribute('aria-expanded', 'true');
-    status.textContent = 'Loading subscription form…';
-    const loader = document.createElement('script');
-    loader.async = true;
-    loader.src = 'https://subscribe-forms.beehiiv.com/v3/loader.js';
-    loader.dataset.beehiivForm = '8a24cf25-a181-44c7-a2c6-5a18144d1e4d';
-    loader.onload = () => {
-      status.textContent = 'If the form does not appear, use the subscription link below.';
-    };
-    loader.onerror = () => {
-      status.textContent = 'The form could not load. Use the subscription link below.';
-    };
-    document.getElementById('subscribeForm').appendChild(loader);
-  }, { once: true });
-
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebSite",

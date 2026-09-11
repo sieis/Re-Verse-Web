@@ -45,5 +45,6 @@ Local results do not measure Netlify latency, headers, or third-party availabili
 repeat against the deployed URL after merging. Scores can vary between runs.
 
 Inter's Latin variable font is served locally; its SIL Open Font License is in
-`fonts/OFL.txt`. The Beehiiv embed loads after selecting **Subscribe**, with a
-direct subscription link available if the form is blocked or unavailable.
+`fonts/OFL.txt`. The Beehiiv subscription form loads automatically in the page
+using its original asynchronous embed. Its third-party loading can affect
+Lighthouse results; measure the deployed page with the embed available.
