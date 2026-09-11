@@ -2,7 +2,7 @@
 
 # Re-Verse
 
-Re-Verse is a scripture memory app for Progress & Perfection. Pick a verse, and it hides the words one at a time so you can practice recalling them from memory.
+Re-Verse is a scripture memory app for [Progress & Perfection](https://progressandperfection.com). Pick a verse, and it hides the words one at a time so you can practice recalling them from memory.
 
 **Live site:** https://re-verse-web.netlify.app/
 
