@@ -48,3 +48,23 @@ Inter's Latin variable font is served locally; its SIL Open Font License is in
 `fonts/OFL.txt`. The Beehiiv subscription form loads automatically in the page
 using its original asynchronous embed. Its third-party loading can affect
 Lighthouse results; measure the deployed page with the embed available.
+
+### Interpreting the September 11 audit
+
+The supplied production report scored 99 performance, 95 accessibility,
+77 best practices, and 100 SEO. The accessibility failure was an untitled
+iframe inserted by Beehiiv; the page now names that frame as soon as it is
+inserted. Verse data loads after the page markup, before the application code,
+so its download no longer blocks parsing the page head.
+
+Both best-practices failures (third-party cookies and DevTools cookie issues)
+come from the automatically displayed Beehiiv embed. Adding a frame title does
+not remove those cookies. Keeping this embed cannot guarantee 100 best practices.
+A native subscription form with a server-side Beehiiv integration would remove
+the need for that third-party embed, but requires separate integration setup.
+
+Run manual audits in a clean Chrome profile with extensions disabled. The
+supplied report attributes all unused-JavaScript savings and most unminified
+JavaScript savings to browser extensions, which this repository cannot optimize.
+Re-audit the deployment to establish actual scores; these changes do not claim
+verified 100s or change the existing 95-point audit threshold.
