@@ -23,7 +23,11 @@
 <link rel="shortcut icon" href="/my-favicon/favicon.ico" />
 <link rel="apple-touch-icon" sizes="180x180" href="/my-favicon/apple-touch-icon.png" />
 <link rel="manifest" href="/my-favicon/site.webmanifest" />
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
+<!-- Make the data available before the first body render to avoid an empty
+     library/passage flashing and shifting the content below it. -->
+<script src="verses.js"></script>
 <style>
 
   .wrap {
@@ -42,7 +46,7 @@
     font-weight: 600;
     letter-spacing: 1.1px;
     text-transform: uppercase;
-    color: var(--primary);
+    color: var(--primary-text);
   }
 
   h1 {
@@ -86,14 +90,14 @@
 
   .theme-head:hover .theme-name,
   .theme-head:focus-visible .theme-name {
-    color: var(--primary);
+    color: var(--primary-text);
   }
 
   .theme-num {
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.5px;
-    color: var(--primary);
+    color: var(--primary-text);
     font-variant-numeric: tabular-nums;
   }
 
@@ -136,6 +140,8 @@
     max-height: 0;
     transition: max-height 0.3s ease;
   }
+
+  ol.verses[inert] { visibility: hidden; }
 
   section.theme.open ol.verses {
     max-height: 2000px;
@@ -201,7 +207,7 @@
   }
   footer.social a:hover,
   footer.social a:focus-visible {
-    color: var(--primary);
+    color: var(--primary-text);
   }
   footer.social svg {
     width: 18px;
@@ -509,7 +515,6 @@
 
 </div>
 
-<script src="verses.js"></script>
 <script>
   const structuredData = {
     "@context": "https://schema.org",
@@ -558,6 +563,7 @@
     head.type = 'button';
     head.className = 'theme-head';
     head.setAttribute('aria-expanded', 'false');
+    head.setAttribute('aria-controls', `theme-verses-${si}`);
     head.innerHTML = `
       <span class="theme-num">${String(si + 1).padStart(2, '0')}</span>
       <span class="theme-name">${section.name}</span>
@@ -572,14 +578,18 @@
         if (other === sec) return;
         other.classList.remove('open');
         other.querySelector('.theme-head').setAttribute('aria-expanded', 'false');
+        other.querySelector('ol').inert = true;
       });
       sec.classList.toggle('open', willOpen);
       head.setAttribute('aria-expanded', String(willOpen));
+      ol.inert = !willOpen;
     });
     sec.appendChild(head);
 
     const ol = document.createElement('ol');
     ol.className = 'verses';
+    ol.id = `theme-verses-${si}`;
+    ol.inert = true;
 
     section.verses.forEach(v => {
       const li = document.createElement('li');
