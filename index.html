@@ -27,7 +27,6 @@
 <link rel="stylesheet" href="styles.css">
 <!-- Make the data available before the first body render to avoid an empty
      library/passage flashing and shifting the content below it. -->
-<script src="verses.js"></script>
 <style>
 
   .wrap {
@@ -508,6 +507,24 @@
 
   <div class="subscribe">
     <p class="subscribe-text">Subscribe to Progress and Perfection, a recovery-themed, Christian-flavored daily reflection</p>
+    <script>
+      // Beehiiv creates its iframe asynchronously without an accessible title.
+      // Observe only this container so replacements receive a title as well.
+      (() => {
+        const container = document.currentScript.parentElement;
+        const titleFrames = () => {
+          container.querySelectorAll('iframe').forEach(frame => {
+            if (!frame.title.trim()) {
+              frame.title = 'Subscribe to Progress and Perfection';
+            }
+          });
+        };
+        new MutationObserver(titleFrames).observe(container, {
+          childList: true, subtree: true
+        });
+        titleFrames();
+      })();
+    </script>
     <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="8a24cf25-a181-44c7-a2c6-5a18144d1e4d"></script>
   </div>
 
@@ -515,6 +532,7 @@
 
 </div>
 
+<script src="verses.js"></script>
 <script>
   const structuredData = {
     "@context": "https://schema.org",
