@@ -1,0 +1,14 @@
+{
+  "name": "re-verse-web",
+  "private": true,
+  "scripts": {
+    "audit": "node scripts/lighthouse.mjs"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "devDependencies": {
+    "chrome-launcher": "1.2.1",
+    "lighthouse": "13.4.1"
+  }
+}
