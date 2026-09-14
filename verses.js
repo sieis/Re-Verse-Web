@@ -191,5 +191,10 @@ const VERSES = [
     slug: "jeremiah-33-2-3", date: "Sep 07", section: "Renewal",
     ref: "Jeremiah 33:2-3", anchor: "Plead", translation: "ESV",
     words: ["Thus","says","the","LORD","who","made","the","earth,","the","LORD","who","formed","it","to","establish","it—","the","LORD","is","his","name:","Call","to","me,","and","I","will","answer","you,","and","will","tell","you","great","and","hidden","things","that","you","have","not","known."]
+  },
+  {
+    slug: "2-corinthians-4-16-17", date: "Sep 14", section: "Renewal",
+    ref: "2 Corinthians 4:16-17", anchor: "Transient", translation: "ESV",
+    words: ["So","we","do","not","lose","heart.","Though","our","outer","self","is","wasting","away,","our","inner","self","is","being","renewed","day","by","day.","For","this","light","momentary","affliction","is","preparing","for","us","an","eternal","weight","of","glory","beyond","all","comparison,"]
   }
 ];
