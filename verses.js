@@ -196,5 +196,10 @@ const VERSES = [
     slug: "2-corinthians-4-16-17", date: "Sep 14", section: "Renewal",
     ref: "2 Corinthians 4:16-17", anchor: "Transient", translation: "ESV",
     words: ["So","we","do","not","lose","heart.","Though","our","outer","self","is","wasting","away,","our","inner","self","is","being","renewed","day","by","day.","For","this","light","momentary","affliction","is","preparing","for","us","an","eternal","weight","of","glory","beyond","all","comparison,"]
+  },
+  {
+    slug: "1-corinthians-10-13", date: "Sep 21", section: "Renewal",
+    ref: "1 Corinthians 10:13", anchor: "Way Out", translation: "ESV",
+    words: ["No","temptation","has","overtaken","you","that","is","not","common","to","man.","God","is","faithful,","and","he","will","not","let","you","be","tempted","beyond","your","ability,","but","with","the","temptation","he","will","also","provide","the","way","of","escape,","that","you","may","be","able","to","endure","it."]
   }
 ];
