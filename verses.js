@@ -201,5 +201,10 @@ const VERSES = [
     slug: "1-corinthians-10-13", date: "Sep 21", section: "Renewal",
     ref: "1 Corinthians 10:13", anchor: "Way Out", translation: "ESV",
     words: ["No","temptation","has","overtaken","you","that","is","not","common","to","man.","God","is","faithful,","and","he","will","not","let","you","be","tempted","beyond","your","ability,","but","with","the","temptation","he","will","also","provide","the","way","of","escape,","that","you","may","be","able","to","endure","it."]
+  },
+  {
+    slug: "1-peter-1-3-4", date: "Sep 28", section: "Renewal",
+    ref: "1 Peter 1:3-4", anchor: "Inheritance", translation: "ESV",
+    words: ["Blessed","be","the","God","and","Father","of","our","Lord","Jesus","Christ!","According","to","his","great","mercy,","he","has","caused","us","to","be","born","again","to","a","living","hope","through","the","resurrection","of","Jesus","Christ","from","the","dead,","to","an","inheritance","that","is","imperishable,","undefiled,","and","unfading,","kept","in","heaven","for","you,"]
   }
 ];
