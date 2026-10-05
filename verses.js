@@ -206,5 +206,10 @@ const VERSES = [
     slug: "1-peter-1-3-4", date: "Sep 28", section: "Renewal",
     ref: "1 Peter 1:3-4", anchor: "Inheritance", translation: "ESV",
     words: ["Blessed","be","the","God","and","Father","of","our","Lord","Jesus","Christ!","According","to","his","great","mercy,","he","has","caused","us","to","be","born","again","to","a","living","hope","through","the","resurrection","of","Jesus","Christ","from","the","dead,","to","an","inheritance","that","is","imperishable,","undefiled,","and","unfading,","kept","in","heaven","for","you,"]
+  },
+  {
+    slug: "revelation-21-4", date: "Oct 05", section: "Renewal",
+    ref: "Revelation 21:4", anchor: "Respite", translation: "ESV",
+    words: ["He","will","wipe","away","every","tear","from","their","eyes,","and","death","shall","be","no","more,","neither","shall","there","be","mourning,","nor","crying,","nor","pain","anymore,","for","the","former","things","have","passed","away."]
   }
 ];
