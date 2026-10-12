@@ -211,5 +211,10 @@ const VERSES = [
     slug: "revelation-21-4", date: "Oct 05", section: "Renewal",
     ref: "Revelation 21:4", anchor: "Respite", translation: "ESV",
     words: ["He","will","wipe","away","every","tear","from","their","eyes,","and","death","shall","be","no","more,","neither","shall","there","be","mourning,","nor","crying,","nor","pain","anymore,","for","the","former","things","have","passed","away."]
+  },
+  {
+    slug: "1-john-1-9", date: "Oct 12", section: "Love",
+    ref: "1 John 1:9", anchor: "Confession", translation: "ESV",
+    words: ["If","we","confess","our","sins,","he","is","faithful","and","just","to","forgive","us","our","sins","and","to","cleanse","us","from","all","unrighteousness."]
   }
 ];
