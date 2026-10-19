@@ -216,5 +216,10 @@ const VERSES = [
     slug: "1-john-1-9", date: "Oct 12", section: "Love",
     ref: "1 John 1:9", anchor: "Confession", translation: "ESV",
     words: ["If","we","confess","our","sins,","he","is","faithful","and","just","to","forgive","us","our","sins","and","to","cleanse","us","from","all","unrighteousness."]
+  },
+  {
+    slug: "ephesians-4-31-32", date: "Oct 19", section: "Love",
+    ref: "Ephesians 4:31-32", anchor: "Kindness", translation: "ESV",
+    words: ["Let","all","bitterness","and","wrath","and","anger","and","clamor","and","slander","be","put","away","from","you,","along","with","all","malice.","Be","kind","to","one","another,","tenderhearted,","forgiving","one","another,","as","God","in","Christ","forgave","you."]
   }
 ];
