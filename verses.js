@@ -221,5 +221,10 @@ const VERSES = [
     slug: "ephesians-4-31-32", date: "Oct 19", section: "Love",
     ref: "Ephesians 4:31-32", anchor: "Kindness", translation: "ESV",
     words: ["Let","all","bitterness","and","wrath","and","anger","and","clamor","and","slander","be","put","away","from","you,","along","with","all","malice.","Be","kind","to","one","another,","tenderhearted,","forgiving","one","another,","as","God","in","Christ","forgave","you."]
+  },
+  {
+    slug: "1-corinthians-16-13-14", date: "Oct 26", section: "Love",
+    ref: "1 Corinthians 16:13-14", anchor: "Stand", translation: "ESV",
+    words: ["Be","watchful,","stand","firm","in","the","faith,","act","like","men,","be","strong.","Let","all","that","you","do","be","done","in","love."]
   }
 ];
