@@ -226,5 +226,10 @@ const VERSES = [
     slug: "1-corinthians-16-13-14", date: "Oct 26", section: "Love",
     ref: "1 Corinthians 16:13-14", anchor: "Stand", translation: "ESV",
     words: ["Be","watchful,","stand","firm","in","the","faith,","act","like","men,","be","strong.","Let","all","that","you","do","be","done","in","love."]
+  },
+  {
+    slug: "1-corinthians-13-4-5", date: "Nov 02", section: "Love",
+    ref: "1 Corinthians 13:4-5", anchor: "Patience", translation: "ESV",
+    words: ["Love","is","patient","and","kind;","love","does","not","envy","or","boast;","it","is","not","arrogant","or","rude.","It","does","not","insist","on","its","own","way;","it","is","not","irritable","or","resentful;"]
   }
 ];
