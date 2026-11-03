@@ -484,19 +484,19 @@
     <h1>Scripture Memory Challenge</h1>
     <p>One passage, every week, all year.</p>
     <div class="view-toggle" id="viewToggle" role="group" aria-label="View mode">
-      <button type="button" data-view="reveal" aria-pressed="true">Reveal</button>
+      <button type="button" data-view="flashcards" aria-pressed="true">Flashcards</button>
       <div class="divider"></div>
-      <button type="button" data-view="flashcards" aria-pressed="false">Flashcards</button>
+      <button type="button" data-view="reveal" aria-pressed="false">Reveal</button>
       <div class="divider"></div>
       <a href="/verse-wheel/">Verse Wheel</a>
     </div>
   </header>
 
   <main>
-    <div class="scene" id="revealScene">
+    <div class="scene" id="revealScene" hidden>
       <div id="sections"></div>
     </div>
-    <div class="scene" id="flashcardScene" hidden>
+    <div class="scene" id="flashcardScene">
       <div class="panel-toolbar" id="gridToolbar">
         <div class="panel-nav">
           <button type="button" class="back-link is-active" disabled>All Themes</button>
@@ -815,7 +815,7 @@
     setView(btn.dataset.view);
   });
 
-  setView(localStorage.getItem('re-verse-view') === 'flashcards' ? 'flashcards' : 'reveal');
+  setView(localStorage.getItem('re-verse-view') === 'reveal' ? 'reveal' : 'flashcards');
 </script>
 </body>
 </html>
