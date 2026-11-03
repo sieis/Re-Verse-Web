@@ -246,7 +246,23 @@
     cursor: pointer;
     transition: background 0.18s ease, color 0.18s ease;
   }
-  .view-toggle button:hover { color: var(--ink); }
+  /* "Verse Wheel" is a link to a sub page, styled to sit in the toggle */
+  .view-toggle a {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    color: var(--body);
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .view-toggle button:hover,
+  .view-toggle a:hover { color: var(--ink); }
   .view-toggle button.is-active {
     background: var(--ink);
     color: var(--canvas);
@@ -471,6 +487,8 @@
       <button type="button" data-view="reveal" aria-pressed="true">Reveal</button>
       <div class="divider"></div>
       <button type="button" data-view="flashcards" aria-pressed="false">Flashcards</button>
+      <div class="divider"></div>
+      <a href="/verse-wheel/">Verse Wheel</a>
     </div>
   </header>
 
