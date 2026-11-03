@@ -10,7 +10,7 @@
   /* Spin-time options: duration -> full turns before landing (fewer turns at
      shorter times so it stays readable, but always enough to pass every slice). */
   const SPEEDS = { 1000: [2, 3], 3000: [3, 5], 6000: [5, 7] };
-  const DEFAULT_MS = 6000;
+  const DEFAULT_MS = 3000;
   const HINT_WORDS = 5;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
