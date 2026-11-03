@@ -32,7 +32,7 @@
 
   /* ===== STATE ===== */
   const state = {
-    mode: 'random',        // 'random' | 'norepeat'
+    mode: 'norepeat',      // 'random' | 'norepeat'
     spinMs: DEFAULT_MS,    // 1000 | 3000 | 6000
     counts: {},            // verse id -> times selected this session
     roundSeen: new Set(),  // verse ids seen in the current round (drives no-repeat)
