@@ -6,11 +6,11 @@
 
   const SESSION_KEY = 'reverse-wheel-session-v1';
   /* Same palette the library's flashcard view uses, one color per section. */
-  const SECTION_COLORS = ['#da291c', '#c4561f', '#c8932f', '#a3a01f', '#6f8f3a', '#2d7048', '#1f7a8c', '#2855a8'];
+  const SECTION_COLORS = ['#da291c', '#1f7a8c', '#b06a0a', '#7a3fa0', '#2d7048', '#b8307a', '#2855a8'];
   /* Spin-time options: duration -> full turns before landing (fewer turns at
      shorter times so it stays readable, but always enough to pass every slice). */
   const SPEEDS = { 1000: [2, 3], 3000: [3, 5], 6000: [5, 7] };
-  const DEFAULT_MS = 6000;
+  const DEFAULT_MS = 3000;
   const HINT_WORDS = 5;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
