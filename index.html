@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Scripture Memory — Progress &amp; Perfection</title>
-<meta name="description" content="One passage, every week, all year. A free scripture memory tool: pick a Bible verse, tap to reveal words at random, and work it into memory.">
+<meta name="description" content="One passage, every week, all year. A free scripture memory tool: flip through themed Bible verse flashcards, or spin the Verse Wheel for a random one.">
 <link rel="canonical" href="https://re-verse-web.netlify.app/">
 <meta name="theme-color" content="#181818">
 <meta property="og:title" content="Scripture Memory — Progress &amp; Perfection">
@@ -65,127 +65,6 @@
     margin: 0;
   }
 
-  section.theme {
-    margin-bottom: var(--sp-md);
-  }
-
-  .theme-head {
-    display: flex;
-    align-items: baseline;
-    gap: var(--sp-xs);
-    padding: var(--sp-xxs) 0;
-    margin-bottom: var(--sp-xxxs);
-    border-bottom: 1px solid var(--hairline);
-    background: none;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    width: 100%;
-    text-align: left;
-    cursor: pointer;
-    color: inherit;
-    font: inherit;
-  }
-
-  .theme-head:hover .theme-name,
-  .theme-head:focus-visible .theme-name {
-    color: var(--primary-text);
-  }
-
-  .theme-num {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: var(--primary-text);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .theme-name {
-    font-family: var(--font);
-    font-weight: 500;
-    font-size: clamp(20px, 3vw, 26px);
-    letter-spacing: -0.2px;
-    transition: color 0.15s ease;
-  }
-
-  .theme-range {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1.1px;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .theme-chevron {
-    margin-left: auto;
-    display: grid;
-    place-items: center;
-    width: 20px;
-    height: 20px;
-    color: var(--muted);
-    transition: transform 0.2s ease;
-    flex-shrink: 0;
-  }
-
-  section.theme.open .theme-chevron {
-    transform: rotate(90deg);
-  }
-
-  ol.verses {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.3s ease;
-  }
-
-  ol.verses[inert] { visibility: hidden; }
-
-  section.theme.open ol.verses {
-    max-height: 2000px;
-  }
-
-  .verse-row {
-    display: grid;
-    grid-template-columns: 72px 1fr;
-    align-items: center;
-    gap: var(--sp-xs);
-    padding: var(--sp-xs) var(--sp-xxxs);
-    border-bottom: 1px solid var(--hairline);
-    text-decoration: none;
-    color: inherit;
-    transition: background 0.15s ease;
-  }
-
-  a.verse-row:hover,
-  a.verse-row:focus-visible {
-    background: var(--canvas-elevated);
-  }
-
-  .verse-row .date {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .verse-row .meta .anchor {
-    font-family: var(--font);
-    font-weight: 500;
-    font-size: 17px;
-    letter-spacing: -0.1px;
-    color: var(--ink);
-  }
-
-  .verse-row .meta .ref {
-    display: block;
-    font-size: 12.5px;
-    color: var(--body);
-    margin-top: 2px;
-  }
-
   footer.social {
     margin-top: var(--sp-xl);
     padding-top: var(--sp-sm);
@@ -233,19 +112,6 @@
     background: var(--canvas-elevated);
     margin-top: var(--sp-xs);
   }
-  .view-toggle button {
-    padding: 10px 20px;
-    font-family: var(--font);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    color: var(--body);
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: background 0.18s ease, color 0.18s ease;
-  }
   /* "Verse Wheel" is a link to a sub page, styled to sit in the toggle */
   .view-toggle a {
     display: inline-flex;
@@ -261,9 +127,19 @@
     color: var(--body);
     transition: background 0.18s ease, color 0.18s ease;
   }
-  .view-toggle button:hover,
+  .view-toggle span {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
   .view-toggle a:hover { color: var(--ink); }
-  .view-toggle button.is-active {
+  .view-toggle .is-active {
     background: var(--ink);
     color: var(--canvas);
   }
@@ -271,8 +147,6 @@
     width: 1px;
     background: var(--hairline);
   }
-
-  .scene[hidden] { display: none !important; }
 
   /* ---------- flashcards: theme grid ---------- */
   .theme-grid {
@@ -483,20 +357,15 @@
     <div class="eyebrow">Progress &amp; Perfection</div>
     <h1>Scripture Memory Challenge</h1>
     <p>One passage, every week, all year.</p>
-    <div class="view-toggle" id="viewToggle" role="group" aria-label="View mode">
-      <button type="button" data-view="flashcards" aria-pressed="true">Flashcards</button>
-      <div class="divider"></div>
-      <button type="button" data-view="reveal" aria-pressed="false">Reveal</button>
+    <div class="view-toggle" role="group" aria-label="View mode">
+      <span class="is-active" aria-current="page">Flashcards</span>
       <div class="divider"></div>
       <a href="/verse-wheel/">Verse Wheel</a>
     </div>
   </header>
 
   <main>
-    <div class="scene" id="revealScene" hidden>
-      <div id="sections"></div>
-    </div>
-    <div class="scene" id="flashcardScene">
+    <div>
       <div class="panel-toolbar" id="gridToolbar">
         <div class="panel-nav">
           <button type="button" class="back-link is-active" disabled>All Themes</button>
@@ -556,23 +425,20 @@
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Scripture Memory — Progress & Perfection",
-    "description": "One passage, every week, all year. A free scripture memory tool: pick a Bible verse, tap to reveal words at random, and work it into memory.",
+    "description": "One passage, every week, all year. A free scripture memory tool: flip through themed Bible verse flashcards, or spin the Verse Wheel for a random one.",
     "url": "https://re-verse-web.netlify.app/",
     "hasPart": VERSES.map(v => ({
       "@type": "Quotation",
       "name": v.anchor,
       "text": v.words.join(' '),
       "citation": v.ref,
-      "inLanguage": "en",
-      "url": `https://re-verse-web.netlify.app/study.html?v=${v.slug}`
+      "inLanguage": "en"
     }))
   };
   const ldScript = document.createElement('script');
   ldScript.type = 'application/ld+json';
   ldScript.textContent = JSON.stringify(structuredData);
   document.head.appendChild(ldScript);
-
-  const sectionsEl = document.getElementById('sections');
 
   const sections = [];
   const bySection = {};
@@ -582,71 +448,6 @@
       sections.push(bySection[v.section]);
     }
     bySection[v.section].verses.push(v);
-  });
-
-  const sectionEls = [];
-
-  sections.forEach((section, si) => {
-    const sec = document.createElement('section');
-    sec.className = 'theme';
-    sectionEls.push(sec);
-
-    const first = section.verses[0].date;
-    const last = section.verses[section.verses.length - 1].date;
-    const range = first.slice(0, 3) + ' – ' + last.slice(0, 3);
-
-    const head = document.createElement('button');
-    head.type = 'button';
-    head.className = 'theme-head';
-    head.setAttribute('aria-expanded', 'false');
-    head.setAttribute('aria-controls', `theme-verses-${si}`);
-    head.innerHTML = `
-      <span class="theme-num">${String(si + 1).padStart(2, '0')}</span>
-      <span class="theme-name">${section.name}</span>
-      <span class="theme-range">${range}</span>
-      <span class="theme-chevron">
-        <svg viewBox="0 0 20 20" fill="none"><path d="M7.5 4.5L14 10l-6.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </span>
-    `;
-    head.addEventListener('click', () => {
-      const willOpen = !sec.classList.contains('open');
-      sectionEls.forEach(other => {
-        if (other === sec) return;
-        other.classList.remove('open');
-        other.querySelector('.theme-head').setAttribute('aria-expanded', 'false');
-        other.querySelector('ol').inert = true;
-      });
-      sec.classList.toggle('open', willOpen);
-      head.setAttribute('aria-expanded', String(willOpen));
-      ol.inert = !willOpen;
-    });
-    sec.appendChild(head);
-
-    const ol = document.createElement('ol');
-    ol.className = 'verses';
-    ol.id = `theme-verses-${si}`;
-    ol.inert = true;
-
-    section.verses.forEach(v => {
-      const li = document.createElement('li');
-      const row = document.createElement('a');
-      row.className = 'verse-row';
-      row.href = `study.html?v=${v.slug}`;
-
-      row.innerHTML = `
-        <span class="date">${v.date}</span>
-        <span class="meta">
-          <span class="anchor">${v.anchor}</span>
-          <span class="ref">${v.ref}</span>
-        </span>
-      `;
-
-      li.appendChild(row);
-      ol.appendChild(li);
-    });
-
-    sec.appendChild(ol);
-    sectionsEl.appendChild(sec);
   });
 
   // ---------- flashcards ----------
@@ -790,32 +591,7 @@
 
   allVersesBtn.addEventListener('click', openAllVerses);
 
-  // ---------- view toggle ----------
-  const viewToggle = document.getElementById('viewToggle');
-  const revealScene = document.getElementById('revealScene');
-  const flashcardScene = document.getElementById('flashcardScene');
-
-  function setView(view) {
-    localStorage.setItem('re-verse-view', view);
-    [...viewToggle.querySelectorAll('button[data-view]')].forEach(btn => {
-      const active = btn.dataset.view === view;
-      btn.classList.toggle('is-active', active);
-      btn.setAttribute('aria-pressed', String(active));
-    });
-    revealScene.hidden = view !== 'reveal';
-    flashcardScene.hidden = view !== 'flashcards';
-    if (view === 'flashcards' && !themeGrid.children.length) {
-      renderThemeGrid();
-    }
-  }
-
-  viewToggle.addEventListener('click', (e) => {
-    const btn = e.target.closest('button[data-view]');
-    if (!btn) return;
-    setView(btn.dataset.view);
-  });
-
-  setView(localStorage.getItem('re-verse-view') === 'reveal' ? 'reveal' : 'flashcards');
+  renderThemeGrid();
 </script>
 </body>
 </html>

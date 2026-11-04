@@ -1,14 +1,11 @@
 /* ============================================================
    Progress & Perfection — Scripture Memory
    Shared verse data. One array, one source of truth — the
-   library page reads it for the list, the study page reads it
-   for passage text and prev/next navigation.
+   library page and the verse wheel both read it.
 
    `words` is the tokenized ESV text: each entry is exactly
    what appears between spaces in the verse, punctuation
-   included. The study page splits each token into
-   lead / core / trail so punctuation stays visible while the
-   letters blank out.
+   included.
    ============================================================ */
 
 const VERSES = [

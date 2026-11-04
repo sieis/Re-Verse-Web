@@ -11,8 +11,6 @@ const reportDirectory = resolve(root, 'lighthouse-reports');
 const routes = [
   ['library', '/'],
   ['verse-wheel', '/verse-wheel/'],
-  ['study', '/study.html?v=psalm-119-11'],
-  ['long-study', '/study.html?v=colossians-3-12-14'],
 ];
 const types = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css',
