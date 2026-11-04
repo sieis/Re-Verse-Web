@@ -301,6 +301,7 @@ body:has(dialog[open]) { overflow: hidden; }
 
 .chip-grid {
   list-style: none;
+  padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: var(--sp-xxs);
@@ -316,6 +317,66 @@ body:has(dialog[open]) { overflow: hidden; }
   border-left: 4px solid var(--accent);
   color: var(--body);
 }
+/* ===== SECTIONS + REMOVAL ===== */
+.sections { margin-bottom: var(--sp-sm); }
+.section-grid {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--sp-xxs);
+}
+.section-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-xs);
+  padding: 12px var(--sp-xs);
+  text-align: left;
+  background: var(--canvas-elevated);
+  border: 1px solid var(--hairline);
+  border-left: 4px solid var(--accent);
+  color: var(--muted);
+  transition: background 0.15s var(--ease-out), color 0.15s var(--ease-out), border-color 0.15s var(--ease-out);
+}
+.section-btn:hover:not(:disabled) { color: var(--ink); border-color: var(--ink); border-left-color: var(--accent); }
+.section-btn.is-on { background: var(--ink); color: var(--canvas); border-color: var(--ink); border-left-color: var(--accent); }
+.section-btn.is-partial { color: var(--ink); border-color: var(--ink); border-left-color: var(--accent); }
+.section-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.section-name { font-size: 14px; font-weight: 600; }
+.section-count { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.edit-note { margin-top: var(--sp-xs); font-size: 14px; line-height: 1.5; color: var(--body); }
+
+.chip-tail { display: flex; align-items: center; gap: var(--sp-xxs); }
+.chip-btn {
+  min-width: 30px;
+  padding: 2px 8px;
+  border: 1px solid var(--hairline);
+  background: transparent;
+  color: var(--body);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  transition: background 0.15s var(--ease-out), color 0.15s var(--ease-out), border-color 0.15s var(--ease-out);
+}
+.chip-add { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+.chip-btn:hover:not(:disabled) { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
+.chip-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.chip.is-removed { opacity: 0.75; border-left-color: var(--hairline); }
+.chip.is-removed .chip-ref { text-decoration: line-through; }
+.removed { margin-top: var(--sp-md); }
+.removed-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-xxs);
+}
+.removed-head .control-label { margin-bottom: 0; }
+.removed[hidden] { display: none; }
+
 .chip-ref { font-size: 14px; font-weight: 600; }
 .chip-count {
   min-width: 30px;
@@ -597,7 +658,19 @@ footer.social svg { width: 18px; height: 18px; }
         </div>
         <button type="button" class="reset-btn">Reset session</button>
       </div>
+      <div class="sections">
+        <div class="control-label" id="sections-label">Sections on the wheel</div>
+        <ul class="section-grid" aria-labelledby="sections-label"><!-- rendered by wheel.js --></ul>
+        <p class="edit-note">Tap a section to take it off the wheel or put it back. Use × on a verse below to drop just that one. The wheel keeps at least two verses.</p>
+      </div>
       <ul class="chip-grid"><!-- rendered by wheel.js --></ul>
+      <div class="removed" hidden>
+        <div class="removed-head">
+          <div class="control-label">Removed verses</div>
+          <button type="button" class="reset-btn restore-btn">Restore all</button>
+        </div>
+        <ul class="chip-grid removed-grid"><!-- rendered by wheel.js --></ul>
+      </div>
     </section>
   </main>
 

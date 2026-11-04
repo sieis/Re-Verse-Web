@@ -26,9 +26,24 @@
       color: SECTION_COLORS[sectionIndex.get(v.section) % SECTION_COLORS.length]
     };
   });
-  const N = verses.length;
-  const SLICE = 360 / N;
   const byId = new Map(verses.map((v, i) => [v.id, i]));
+  const sections = [...sectionIndex.keys()].map((name) => ({
+    name,
+    color: SECTION_COLORS[sectionIndex.get(name) % SECTION_COLORS.length],
+    verses: verses.filter((v) => v.section === name)
+  }));
+  const MIN_ACTIVE = 2;   // a wheel needs at least two verses to be worth spinning
+
+  /* `active` is the verses currently on the wheel (everything not removed).
+     N and SLICE follow it, so slices re-divide whenever the set changes. */
+  let active = verses;
+  let N = verses.length;
+  let SLICE = 360 / N;
+  function applyActive() {
+    active = verses.filter((v) => !state.removed.has(v.id));
+    N = active.length;
+    SLICE = 360 / N;
+  }
 
   /* ===== STATE ===== */
   const state = {
@@ -36,6 +51,7 @@
     spinMs: DEFAULT_MS,    // 1000 | 3000 | 6000
     counts: {},            // verse id -> times selected this session
     roundSeen: new Set(),  // verse ids seen in the current round (drives no-repeat)
+    removed: new Set(),    // verse ids taken off the wheel
     round: 1,
     spins: 0,
     last: null,            // id of the most recent pick
@@ -54,6 +70,8 @@
         if (byId.has(id) && n > 0) state.counts[id] = n | 0;
       }
       (raw.roundSeen || []).forEach((id) => { if (byId.has(id)) state.roundSeen.add(id); });
+      (raw.removed || []).forEach((id) => { if (byId.has(id)) state.removed.add(id); });
+      if (verses.length - state.removed.size < MIN_ACTIVE) state.removed.clear();
       state.round = Math.max(1, raw.round | 0 || 1);
       state.spins = Math.max(0, raw.spins | 0);
       state.last = byId.has(raw.last) ? raw.last : null;
@@ -68,6 +86,7 @@
       sessionStorage.setItem(SESSION_KEY, JSON.stringify({
         counts: state.counts,
         roundSeen: [...state.roundSeen],
+        removed: [...state.removed],
         round: state.round,
         spins: state.spins,
         last: state.last,
@@ -88,7 +107,11 @@
   const spinBtn = $('.spin-btn');
   const modeNote = $('.mode-note');
   const resetBtn = $('.reset-btn');
-  const chipGrid = $('.chip-grid');
+  const chipGrid = $('.chip-grid:not(.removed-grid)');
+  const sectionGrid = $('.section-grid');
+  const removedBox = $('.removed');
+  const removedGrid = $('.removed-grid');
+  const restoreBtn = $('.restore-btn');
   const live = $('#live');
   const dlg = $('.result');
   const revealBtns = dlg.querySelectorAll('[data-reveal]');
@@ -113,7 +136,7 @@
     const step = (Math.PI * 2) / N;
     const start = -Math.PI / 2;
 
-    verses.forEach((v, i) => {
+    active.forEach((v, i) => {
       const a0 = start + i * step;
       const a1 = a0 + step;
       ctx.beginPath();
@@ -136,7 +159,7 @@
     const maxLen = R - hubR - 24;
     let fs = Math.max(8, Math.min(14, ((2 * Math.PI * R * 0.7) / N) * 0.5));
     ctx.font = `600 ${fs}px ${family}`;
-    const longest = Math.max(...verses.map((v) => ctx.measureText(v.ref).width));
+    const longest = Math.max(...active.map((v) => ctx.measureText(v.ref).width));
     if (longest > maxLen) {
       fs = Math.max(6.5, fs * (maxLen / longest));
       ctx.font = `600 ${fs}px ${family}`;
@@ -145,7 +168,7 @@
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
-    verses.forEach((v, i) => {
+    active.forEach((v, i) => {
       ctx.save();
       ctx.translate(c, c);
       ctx.rotate(start + (i + 0.5) * step);
@@ -167,21 +190,26 @@
   /* True random: any verse. No repeats: only verses not yet seen this round;
      once every verse has been seen a new round starts (and the verse just
      picked is held out so it can't land twice in a row across the boundary). */
+  /* Verses seen this round that are still on the wheel. */
+  function seenInRound() {
+    return active.reduce((n, v) => n + (state.roundSeen.has(v.id) ? 1 : 0), 0);
+  }
+
   function pickTarget() {
-    const rollover = state.roundSeen.size >= N;
+    const rollover = seenInRound() >= N;
     const seen = rollover ? new Set() : state.roundSeen;
     let pool = [];
     for (let i = 0; i < N; i++) {
-      if (state.mode === 'random' || !seen.has(verses[i].id)) pool.push(i);
+      if (state.mode === 'random' || !seen.has(active[i].id)) pool.push(i);
     }
     if (state.mode === 'norepeat' && rollover && N > 1) {
-      pool = pool.filter((i) => verses[i].id !== state.last);
+      pool = pool.filter((i) => active[i].id !== state.last);
     }
     return { index: pool[Math.floor(Math.random() * pool.length)], rollover };
   }
 
   function commitPick(index, rollover) {
-    const v = verses[index];
+    const v = active[index];
     if (rollover) {
       state.round += 1;
       state.roundSeen.clear();
@@ -212,6 +240,7 @@
     resetBtn.disabled = true;
     spinBtn.textContent = 'Spinning…';
     live.textContent = 'Spinning.';
+    renderEditors();
 
     const { index, rollover } = pickTarget();
 
@@ -240,7 +269,7 @@
       resetBtn.disabled = false;
 
       commitPick(index, rollover);
-      const v = verses[index];
+      const v = active[index];
       setReadout(v, { label: v.section, mode: 'final' });
       live.textContent = `Landed on ${v.ref}.`;
       render({ flash: v.id });
@@ -266,7 +295,7 @@
       if (idx !== lastIdx) {
         lastIdx = idx;
         kick = 1;
-        const v = verses[idx];
+        const v = active[idx];
         readoutRef.textContent = v.ref;
         readout.style.setProperty('--accent', v.color);
       }
@@ -348,18 +377,130 @@
   dlg.addEventListener('cancel', (e) => { e.preventDefault(); dismiss(false); });  // Esc
 
   /* ===== TRACKER + STATS ===== */
+  function chipFor(v, { removed }) {
+    const li = document.createElement('li');
+    li.className = removed ? 'chip is-removed' : 'chip';
+    li.dataset.id = v.id;
+    li.style.setProperty('--accent', v.color);
+    li.title = v.section;
+    const ref = document.createElement('span');
+    ref.className = 'chip-ref';
+    ref.textContent = v.ref;
+    li.appendChild(ref);
+    const tail = document.createElement('span');
+    tail.className = 'chip-tail';
+    if (!removed) {
+      const count = document.createElement('span');
+      count.className = 'chip-count';
+      tail.appendChild(count);
+    }
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = removed ? 'chip-btn chip-add' : 'chip-btn chip-remove';
+    btn.dataset.verse = v.id;
+    btn.dataset.do = removed ? 'add' : 'remove';
+    btn.setAttribute('aria-label', `${removed ? 'Add' : 'Remove'} ${v.ref} ${removed ? 'to' : 'from'} the wheel`);
+    btn.textContent = removed ? 'Add' : '×';
+    tail.appendChild(btn);
+    li.appendChild(tail);
+    return li;
+  }
+
+  /* Rebuilds everything that depends on which verses are on the wheel:
+     the section toggles, the verse list, and the removed-verses list. */
   function buildTracker() {
     chipGrid.innerHTML = '';
-    verses.forEach((v) => {
+    active.forEach((v) => chipGrid.appendChild(chipFor(v, { removed: false })));
+
+    removedGrid.innerHTML = '';
+    verses.filter((v) => state.removed.has(v.id))
+      .forEach((v) => removedGrid.appendChild(chipFor(v, { removed: true })));
+    removedBox.hidden = state.removed.size === 0;
+
+    sectionGrid.innerHTML = '';
+    sections.forEach((sec) => {
+      const on = sec.verses.filter((v) => !state.removed.has(v.id)).length;
       const li = document.createElement('li');
-      li.className = 'chip';
-      li.dataset.id = v.id;
-      li.style.setProperty('--accent', v.color);
-      li.title = v.section;
-      li.innerHTML = '<span class="chip-ref"></span><span class="chip-count"></span>';
-      li.firstChild.textContent = v.ref;
-      chipGrid.appendChild(li);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'section-btn';
+      btn.dataset.section = sec.name;
+      btn.style.setProperty('--accent', sec.color);
+      btn.setAttribute('aria-pressed', on === sec.verses.length ? 'true' : on === 0 ? 'false' : 'mixed');
+      btn.classList.toggle('is-on', on === sec.verses.length);
+      btn.classList.toggle('is-partial', on > 0 && on < sec.verses.length);
+      const name = document.createElement('span');
+      name.className = 'section-name';
+      name.textContent = sec.name;
+      const n = document.createElement('span');
+      n.className = 'section-count';
+      n.textContent = `${on} / ${sec.verses.length}`;
+      btn.append(name, n);
+      li.appendChild(btn);
+      sectionGrid.appendChild(li);
     });
+    renderEditors();
+  }
+
+  /* Edit controls lock while the wheel spins, and removal stops at the minimum. */
+  function renderEditors() {
+    const lock = state.spinning;
+    const atMin = N <= MIN_ACTIVE;
+    chipGrid.querySelectorAll('.chip-remove').forEach((b) => { b.disabled = lock || atMin; });
+    removedGrid.querySelectorAll('.chip-add').forEach((b) => { b.disabled = lock; });
+    restoreBtn.disabled = lock;
+    sectionGrid.querySelectorAll('.section-btn').forEach((b) => {
+      const sec = sections.find((s) => s.name === b.dataset.section);
+      const onCount = sec.verses.filter((v) => !state.removed.has(v.id)).length;
+      const wouldRemove = onCount === sec.verses.length;       // a click removes the section
+      b.disabled = lock || (wouldRemove && N - onCount < MIN_ACTIVE);
+    });
+  }
+
+  function updateWheel(message) {
+    applyActive();
+    buildTracker();
+    drawWheel();
+    saveSession();
+    render();
+    if (message) live.textContent = message;
+  }
+
+  function removeVerse(id) {
+    if (state.spinning || N <= MIN_ACTIVE || state.removed.has(id)) return;
+    const at = active.findIndex((v) => v.id === id);
+    state.removed.add(id);
+    updateWheel(`${verses[byId.get(id)].ref} removed from the wheel.`);
+    /* The clicked button is gone; hand focus to its neighbour so keyboard users keep their place. */
+    const next = chipGrid.querySelectorAll('.chip-remove')[Math.min(at, N - 1)];
+    if (next && !next.disabled) next.focus({ preventScroll: true });
+  }
+
+  function addVerse(id) {
+    if (state.spinning || !state.removed.has(id)) return;
+    state.removed.delete(id);
+    updateWheel(`${verses[byId.get(id)].ref} added to the wheel.`);
+  }
+
+  /* A section toggles as a unit: fully on removes it, anything else adds it all back. */
+  function toggleSection(name) {
+    const sec = sections.find((s) => s.name === name);
+    if (!sec || state.spinning) return;
+    const refocus = () => {
+      const b = [...sectionGrid.querySelectorAll('.section-btn')].find((x) => x.dataset.section === name);
+      if (b && !b.disabled) b.focus({ preventScroll: true });
+    };
+    const onCount = sec.verses.filter((v) => !state.removed.has(v.id)).length;
+    if (onCount === sec.verses.length) {
+      if (N - onCount < MIN_ACTIVE) return;
+      sec.verses.forEach((v) => state.removed.add(v.id));
+      updateWheel(`${name} removed from the wheel.`);
+      refocus();
+    } else {
+      sec.verses.forEach((v) => state.removed.delete(v.id));
+      updateWheel(`${name} added to the wheel.`);
+      refocus();
+    }
   }
 
   function render({ flash } = {}) {
@@ -375,12 +516,12 @@
       }
     });
 
-    const seen = Object.keys(state.counts).length;
+    const seen = active.reduce((n, v) => n + (state.counts[v.id] ? 1 : 0), 0);
     $('[data-stat="spins"]').textContent = state.spins;
     $('[data-stat="seen"]').innerHTML = `${seen}<small> / ${N}</small>`;
     $('[data-stat="round"]').textContent = state.round;
 
-    const left = N - state.roundSeen.size;
+    const left = N - seenInRound();
     if (state.mode === 'random') {
       modeNote.textContent = 'Every spin is independent, so the same verse can come up again, even back to back.';
     } else if (left === 0) {
@@ -390,6 +531,7 @@
     }
 
     resetBtn.disabled = state.spinning || (state.spins === 0);
+    renderEditors();
   }
 
   /* Reset takes two clicks so a stray tap can't wipe a session. */
@@ -444,6 +586,7 @@
   /* ===== INIT ===== */
   document.addEventListener('DOMContentLoaded', () => {
     loadSession();
+    applyActive();
     buildTracker();
     setMode(state.mode);
     setSpinMs(state.spinMs);
@@ -453,6 +596,24 @@
     document.querySelectorAll('.speed-toggle button')
       .forEach((btn) => btn.addEventListener('click', () => setSpinMs(Number(btn.dataset.ms))));
     spinBtn.addEventListener('click', spin);
+
+    chipGrid.addEventListener('click', (e) => {
+      const b = e.target.closest('.chip-remove');
+      if (b) removeVerse(b.dataset.verse);
+    });
+    removedGrid.addEventListener('click', (e) => {
+      const b = e.target.closest('.chip-add');
+      if (b) addVerse(b.dataset.verse);
+    });
+    sectionGrid.addEventListener('click', (e) => {
+      const b = e.target.closest('.section-btn');
+      if (b) toggleSection(b.dataset.section);
+    });
+    restoreBtn.addEventListener('click', () => {
+      if (state.spinning || !state.removed.size) return;
+      state.removed.clear();
+      updateWheel('All verses are back on the wheel.');
+    });
 
     drawWheel();
     new ResizeObserver(drawWheel).observe(canvas);
