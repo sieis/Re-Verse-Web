@@ -200,6 +200,9 @@ body:has(dialog[open]) { overflow: hidden; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.readout.is-link { cursor: pointer; }
+.readout.is-link:hover { border-color: var(--ink); border-left-color: var(--accent); }
+.readout.is-link:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .readout.is-idle .readout-ref { color: var(--muted); font-weight: 500; }
 .readout.is-spinning .readout-ref { color: var(--body); }
 

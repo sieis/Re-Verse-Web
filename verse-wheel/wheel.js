@@ -231,6 +231,26 @@
     readout.style.setProperty('--accent', v ? v.color : 'var(--hairline)');
     if (label != null) readoutLabel.textContent = label;
     readoutRef.textContent = v ? v.ref : 'Press spin';
+
+    /* Once a verse has landed, the card doubles as a button that reopens its pop-up. */
+    const canOpen = !!v && mode === 'final';
+    readout.classList.toggle('is-link', canOpen);
+    if (canOpen) {
+      readout.setAttribute('role', 'button');
+      readout.tabIndex = 0;
+      readout.setAttribute('aria-label', `${v.ref}. Open verse pop-up`);
+      readout.title = 'Open verse pop-up';
+    } else {
+      readout.removeAttribute('role');
+      readout.removeAttribute('tabindex');
+      readout.removeAttribute('aria-label');
+      readout.removeAttribute('title');
+    }
+  }
+
+  function reopenLast() {
+    if (state.spinning || dlg.open || !state.last) return;
+    showResult(verses[byId.get(state.last)]);
   }
 
   function spin() {
@@ -596,6 +616,13 @@
     document.querySelectorAll('.speed-toggle button')
       .forEach((btn) => btn.addEventListener('click', () => setSpinMs(Number(btn.dataset.ms))));
     spinBtn.addEventListener('click', spin);
+    readout.addEventListener('click', () => { if (readout.classList.contains('is-link')) reopenLast(); });
+    readout.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && readout.classList.contains('is-link')) {
+        e.preventDefault();
+        reopenLast();
+      }
+    });
 
     chipGrid.addEventListener('click', (e) => {
       const b = e.target.closest('.chip-remove');
