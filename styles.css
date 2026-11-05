@@ -351,6 +351,11 @@ footer.social svg { width: 18px; height: 18px; }
   max-width: 420px;
   text-align: center;
 }
+.subscribe iframe {
+  display: block;
+  width: 100%;
+  border-radius: var(--r-md);   /* Beehiiv paints its own white page inside the frame; rounding makes it a tidy card in dark mode */
+}
 .subscribe-text {
   font-size: 13px;
   line-height: 1.5;

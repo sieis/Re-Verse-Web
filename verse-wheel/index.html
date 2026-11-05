@@ -302,6 +302,7 @@ body:has(dialog[open]) { overflow: hidden; }
 .section-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .section-name { font-size: 14px; font-weight: 600; }
 .section-count { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sections-hint { margin-bottom: var(--sp-xs); font-size: 14px; line-height: 1.5; color: var(--body); }
 .edit-note { margin-top: var(--sp-xs); font-size: 14px; line-height: 1.5; color: var(--body); }
 
 .chip-tail { display: flex; align-items: center; gap: var(--sp-xxs); }
@@ -595,8 +596,9 @@ body:has(dialog[open]) { overflow: hidden; }
       </div>
       <div class="sections">
         <div class="control-label" id="sections-label">Sections on the wheel</div>
+        <p class="sections-hint">Every section starts on the wheel. Tap a section to deselect it and take it off. Tap again to put it back.</p>
         <ul class="section-grid" aria-labelledby="sections-label"><!-- rendered by wheel.js --></ul>
-        <p class="edit-note">Tap a section to take it off the wheel or put it back. Use × on a verse below to drop just that one. The wheel keeps at least two verses.</p>
+        <p class="edit-note">Use × on a verse below to drop just that one. The wheel keeps at least two verses.</p>
       </div>
       <ul class="chip-grid"><!-- rendered by wheel.js --></ul>
       <div class="removed" hidden>
