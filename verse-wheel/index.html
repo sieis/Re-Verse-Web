@@ -66,6 +66,7 @@ body:has(dialog[open]) { overflow: hidden; }
    rotates. Clipping here keeps them from creating page-level overflow
    (which widens the layout viewport on phones mid-spin). */
 .wheel-clip {
+  cursor: pointer;
   border-radius: 50%;
   overflow: hidden;
   aspect-ratio: 1;

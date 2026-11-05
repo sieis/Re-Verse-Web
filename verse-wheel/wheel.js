@@ -625,6 +625,7 @@
     document.querySelectorAll('.speed-toggle button')
       .forEach((btn) => btn.addEventListener('click', () => setSpinMs(Number(btn.dataset.ms))));
     spinBtn.addEventListener('click', spin);
+    $('.wheel-clip').addEventListener('click', spin);   // the wheel itself is also a spin target (mouse/touch; the button covers keyboard)
     readout.addEventListener('click', () => { if (readout.classList.contains('is-link')) reopenLast(); });
     readout.addEventListener('keydown', (e) => {
       if ((e.key === 'Enter' || e.key === ' ') && readout.classList.contains('is-link')) {
