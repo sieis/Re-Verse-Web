@@ -1,11 +1,14 @@
 /* ============================================================
-   Progress & Perfection — Scripture Memory
-   Design language: Ferrari marketing-site editorial system.
-   Near-black cinematic canvas, Rosso Corsa used scarcely,
-   sharp 0px corners everywhere except pill badges, a single
-   sans family, uppercase tracked CTA/nav labels, explicit 8px
-   spacing ladder. FerrariSans is licensed — Inter is the
-   documented open-source substitute.
+   Re-Verse — Progress & Perfection Scripture Memory
+   Design language: calm, light, soft. Warm off-white canvas,
+   blue-slate primary, clay accent, rounded corners, gentle
+   shadows. Light is the default; dark is opt-in via the
+   header toggle (html[data-theme="dark"]).
+
+   ► TO RECOLOR THE SITE, EDIT ONLY THE TWO TOKEN BLOCKS BELOW.
+     Every other rule (and the wheel canvas, via wheel.js)
+     reads from these variables. (--accent is reserved for the
+     per-card section color that each component sets itself.)
    ============================================================ */
 
 /* Latin variable subset, self-hosted to avoid a third-party CSS/font chain.
@@ -18,29 +21,100 @@
   src: url('fonts/inter-latin-wght-normal.woff2') format('woff2');
 }
 
+/* ------------------------------------------------------------
+   TOKENS: LIGHT (default)
+   ------------------------------------------------------------ */
 :root {
-  /* brand + accent */
-  --primary: #da291c;          /* Rosso Corsa */
-  --primary-text: #ff786b;     /* Accessible red text on both dark surfaces */
-  --primary-active: #b01e0a;
-  --primary-soft: rgba(218, 41, 28, 0.16);
+  color-scheme: light;
 
-  /* surface */
-  --canvas: #181818;           /* near-black, never pure black */
-  --canvas-elevated: #303030;
-  --canvas-light: #ffffff;
+  /* brand */
+  --primary: #3f5f82;            /* blue-slate: buttons, active states */
+  --primary-hover: #334e6c;
+  --on-primary: #ffffff;
+  --primary-text: #3f5f82;       /* primary used as text on the canvas */
+  --primary-soft: rgba(63, 95, 130, 0.10);
+  --clay: #c47a4e;               /* clay accent: used sparingly (pointer, hub, highlights) */
+  --clay-text: #985527;          /* clay as readable text */
 
-  /* hairlines */
-  --hairline: #303030;
-  --hairline-soft: #ebebeb;
+  /* surfaces */
+  --canvas: #faf8f5;             /* page background */
+  --surface: #ffffff;            /* cards, dialog */
+  --surface-2: #f2eee8;          /* sunken: segmented tracks, hub, chips */
+  --overlay: rgba(38, 48, 59, 0.46);
 
   /* text */
-  --ink: #ffffff;
-  --body: #a0a0a0;
-  --muted: #a0a0a0;
-  --muted-soft: #8f8f8f;
-  --on-primary: #ffffff;
+  --ink: #26303b;
+  --body: #4a5562;
+  --muted: #646d7a;
 
+  /* lines + depth */
+  --hairline: #e6e0d6;
+  --hairline-strong: #cfc7ba;
+  --shadow-sm: 0 1px 2px rgba(38, 48, 59, 0.06), 0 1px 3px rgba(38, 48, 59, 0.05);
+  --shadow-md: 0 4px 14px rgba(38, 48, 59, 0.08), 0 2px 4px rgba(38, 48, 59, 0.04);
+  --shadow-lg: 0 18px 48px rgba(38, 48, 59, 0.18);
+
+  /* section colors: one per theme of verses (library cards + wheel slices).
+     Muted on purpose; each holds 4.5:1 against white text. */
+  --sec-1: #4f7396;              /* Foundation */
+  --sec-2: #3f8079;              /* Freedom */
+  --sec-3: #a8623a;              /* God's Presence */
+  --sec-4: #7d5c93;              /* Love */
+  --sec-5: #547a5a;              /* Renewal */
+  --sec-6: #a55d76;              /* Strength in Weakness */
+  --sec-7: #5f68a3;              /* spare: used if a 7th section is added */
+
+  /* wheel canvas */
+  --wheel-gap: #faf8f5;          /* line between slices */
+  --wheel-text: #ffffff;         /* reference labels on slices */
+  --wheel-shade: rgba(0, 0, 0, 0.10);  /* alternate-slice shading */
+}
+
+/* ------------------------------------------------------------
+   TOKENS: DARK (override only what changes)
+   ------------------------------------------------------------ */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --primary: #8fb0d3;
+  --primary-hover: #a6c2df;
+  --on-primary: #11202f;
+  --primary-text: #9dbbdc;
+  --primary-soft: rgba(143, 176, 211, 0.14);
+  --clay: #e0a07a;
+  --clay-text: #e6ae8b;
+
+  --canvas: #14181c;
+  --surface: #1d2228;
+  --surface-2: #262c33;
+  --overlay: rgba(6, 9, 12, 0.7);
+
+  --ink: #eceff3;
+  --body: #b6bec9;
+  --muted: #909aa7;
+
+  --hairline: #2d343c;
+  --hairline-strong: #414a54;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.55);
+
+  --sec-1: #5d82a7;
+  --sec-2: #4a9189;
+  --sec-3: #b8704a;
+  --sec-4: #8d6ba4;
+  --sec-5: #628a69;
+  --sec-6: #b56a85;
+  --sec-7: #6f79b6;
+
+  --wheel-gap: #1d2228;
+  --wheel-shade: rgba(0, 0, 0, 0.16);
+}
+
+/* ------------------------------------------------------------
+   NON-COLOR TOKENS
+   ------------------------------------------------------------ */
+:root {
   /* spacing ladder (8px base) */
   --sp-xxxs: 4px;
   --sp-xxs: 8px;
@@ -50,11 +124,24 @@
   --sp-lg: 48px;
   --sp-xl: 64px;
   --sp-xxl: 96px;
-  --sp-super: 128px;
+
+  /* shape */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-pill: 999px;
 
   --font: 'Inter', -apple-system, system-ui, sans-serif;
+  /* Scripture + headings get a warm serif from the system stack (no download). */
+  --font-serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+
+  --ease-out: cubic-bezier(0.2, 0.65, 0.3, 1);
 }
 
+/* ------------------------------------------------------------
+   BASE
+   ------------------------------------------------------------ */
 * { box-sizing: border-box; }
 
 html, body {
@@ -65,8 +152,11 @@ html, body {
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
 }
+body { transition: background-color 0.25s ease, color 0.25s ease; }
 
 a { color: inherit; }
+
+h1, h2, h3, p, ul { margin: 0; }
 
 .sr-only {
   position: absolute;
@@ -81,6 +171,7 @@ a { color: inherit; }
 
 button {
   font-family: inherit;
+  font-size: inherit;
   border: none;
   background: none;
   color: inherit;
@@ -90,41 +181,190 @@ button {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent-yellow, #f6e500);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
-/* shared components */
-
-.button-primary {
-  background: var(--primary);
-  color: var(--on-primary);
-  font-family: var(--font);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
-  border: none;
-  border-radius: 0;
-  padding: 14px 32px;
-  cursor: pointer;
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--sp-lg) var(--sp-xs) var(--sp-xxl);
 }
-.button-primary:active { background: var(--primary-active); }
 
-.icon-btn {
-  background: none;
-  border: none;
+/* ------------------------------------------------------------
+   PAGE HEAD
+   ------------------------------------------------------------ */
+.page-head { margin-bottom: var(--sp-xl); }
+
+.head-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-xs);
+  margin-bottom: var(--sp-md);
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--clay-text);
+}
+
+h1 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(34px, 6vw, 54px);
+  line-height: 1.1;
+  letter-spacing: -0.6px;
+  margin: 0 0 var(--sp-xs);
+}
+
+.page-head p {
   color: var(--body);
-  width: 36px;
-  height: 36px;
+  font-size: 16px;
+  line-height: 1.55;
+  max-width: 46ch;
+}
+
+/* theme toggle */
+.theme-toggle {
   display: grid;
   place-items: center;
-  cursor: pointer;
-  border-radius: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-sm);
+  color: var(--body);
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
-.icon-btn:hover, .icon-btn:focus-visible {
+.theme-toggle:hover { color: var(--ink); border-color: var(--hairline-strong); }
+.theme-toggle svg { width: 18px; height: 18px; }
+.theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+/* ------------------------------------------------------------
+   SHARED CONTROLS
+   ------------------------------------------------------------ */
+
+/* Pill button (outlined). Active state fills with the primary. */
+.back-link, .nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xxs);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
   color: var(--ink);
-  background: var(--canvas-elevated);
+  padding: 10px 18px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+  user-select: none;
+  transition: background 0.15s var(--ease-out), color 0.15s var(--ease-out), border-color 0.15s var(--ease-out);
+}
+.nav-link { min-width: 42px; padding: 10px; }
+.back-link:hover:not(:disabled):not(.is-active),
+.nav-link:hover:not(:disabled) {
+  border-color: var(--primary);
+  color: var(--primary-text);
+}
+.back-link.is-active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--on-primary);
+  box-shadow: none;
+}
+.back-link:disabled { cursor: default; }
+.nav-link:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Segmented control: a sunken track with a raised, filled active segment. */
+.segmented, .view-toggle {
+  display: inline-flex;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+}
+.segmented button,
+.view-toggle a,
+.view-toggle span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: var(--r-pill);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  color: var(--body);
+  transition: background 0.18s var(--ease-out), color 0.18s var(--ease-out);
+}
+.segmented button:hover, .view-toggle a:hover { color: var(--ink); }
+.segmented button.is-active,
+.view-toggle .is-active {
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: var(--shadow-sm);
+}
+.segmented .divider, .view-toggle .divider { display: none; }
+
+/* ------------------------------------------------------------
+   FOOTER, SUBSCRIBE, NOTICE
+   ------------------------------------------------------------ */
+footer.social {
+  margin-top: var(--sp-xl);
+  padding-top: var(--sp-sm);
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xs);
+}
+footer.social a {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-pill);
+  color: var(--muted);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+footer.social a:hover,
+footer.social a:focus-visible {
+  color: var(--primary-text);
+  background: var(--primary-soft);
+}
+footer.social svg { width: 18px; height: 18px; }
+
+.subscribe {
+  margin: var(--sp-sm) auto 0;
+  max-width: 420px;
+  text-align: center;
+}
+.subscribe-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--body);
+  margin: 0 0 var(--sp-xs);
+}
+
+.translation-notice {
+  margin: var(--sp-sm) auto 0;
+  max-width: 560px;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--muted);
 }
 
 @media (prefers-reduced-motion: reduce) {

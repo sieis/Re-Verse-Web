@@ -2,7 +2,7 @@
 
 > Re-Verse is a scripture memory app for [Progress & Perfection](https://progressandperfection.com). Browse a year of weekly verses as flashcards, or spin the Verse Wheel to drill a random one.
 
-Re-Verse is a static, client-rendered site (no build step, no backend). `index.html` is the verse library (flashcards), `verse-wheel/` is the random verse spinner (`index.html` plus `wheel.js`), and `verses.js` holds the verse data consumed by both. Live site: https://re-verse-web.netlify.app/
+Re-Verse is a static, client-rendered site (no build step, no backend). `index.html` is the verse library (flashcards), `verse-wheel/` is the random verse spinner (`index.html` plus `wheel.js`), `verses.js` holds the verse data consumed by both, `styles.css` holds the shared light/dark design tokens, and `theme.js` runs the theme toggle. Live site: https://re-verse-web.netlify.app/
 
 ## Docs
 
