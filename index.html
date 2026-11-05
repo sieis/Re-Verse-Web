@@ -29,7 +29,26 @@
 <style>
   /* Library page styles. Colors come from the tokens in styles.css. */
 
-  .view-toggle { margin-top: var(--sp-sm); }
+  .head-actions { display: flex; align-items: center; gap: var(--sp-xxs); }
+  .wheel-link {
+    display: inline-flex;
+    white-space: nowrap;
+    align-items: center;
+    height: 40px;
+    padding: 0 18px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    color: var(--body);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .wheel-link:hover { color: var(--ink); border-color: var(--hairline-strong); }
+  .segmented button { border: 0; background: transparent; font-family: inherit; cursor: pointer; }
+  .segmented button.is-active, .segmented button:disabled.is-active { background: var(--primary); color: var(--on-primary); cursor: default; }
 
   /* ---------- theme grid ---------- */
   .theme-grid {
@@ -127,13 +146,18 @@
     border-radius: var(--r-lg);
     box-shadow: var(--shadow-sm);
     overflow: hidden;
+    transition: border-color 0.2s ease, transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+  }
+  .verse-head {
     display: block;
     width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
     text-align: left;
     font: inherit;
     color: inherit;
     cursor: pointer;
-    transition: border-color 0.2s ease, transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
   }
   .verse-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
   .verse-card.is-open { border-color: var(--accent); box-shadow: var(--shadow-md); }
@@ -181,8 +205,8 @@
     margin-top: 2px;
   }
 
-  /* CSS-only accordion via grid-template-rows; minmax(0, …) required so the
-     closed row doesn't floor at one line of text (plain 0fr = minmax(auto,0fr)). */
+  /* Inline mode: CSS-only accordion via grid-template-rows; minmax(0, …) required
+     so the closed row doesn't floor at one line of text. */
   .verse-text-inner {
     display: grid;
     grid-template-rows: minmax(0, 0fr);
@@ -193,14 +217,125 @@
   .verse-text-inner > .verse-text { min-height: 0; overflow: hidden; }
   .verse-text {
     padding: var(--sp-xs);
+    border-top: 1px solid var(--hairline);
+  }
+  .verse-snippet {
     font-family: var(--font-serif);
     font-size: 17px;
     line-height: 1.65;
     color: var(--body);
-    border-top: 1px solid var(--hairline);
+    margin-bottom: var(--sp-xs);
   }
+  .verse-text .hint-btn { padding: 8px var(--sp-xs); }
+  .mode-row { margin-bottom: var(--sp-xs); }
+
+  /* ---------- verse popup (same pattern as the Verse Wheel result card) ---------- */
+  .popup {
+    border: none;
+    background: transparent;
+    color: var(--ink);
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    padding: var(--sp-sm);
+    overflow-y: auto;
+  }
+  .popup[open] { display: flex; }
+  .popup::backdrop {
+    background: var(--overlay);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    transition: opacity 0.25s var(--ease-out);
+  }
+  .popup.is-in::backdrop { opacity: 1; }
+  .popup-card {
+    width: 100%;
+    max-width: 640px;
+    margin: auto;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-xl);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+    transition: opacity 0.26s var(--ease-out), transform 0.38s var(--ease-out);
+  }
+  .popup.is-in .popup-card { opacity: 1; transform: none; }
+  .popup-top {
+    height: 72px;
+    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 62%, white));
+  }
+  .popup-body { padding: var(--sp-lg); }
+  .popup-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: var(--body);
+    margin-bottom: var(--sp-xxs);
+  }
+  .popup-anchor {
+    font-family: var(--font-serif);
+    font-size: clamp(30px, 6vw, 44px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.4px;
+  }
+  .popup-ref { margin-top: 4px; font-size: 15px; color: var(--body); }
+  .reveal-btns { display: flex; flex-wrap: wrap; gap: var(--sp-xxs); margin-top: var(--sp-sm); }
+  .hint-btn {
+    padding: 10px var(--sp-xs);
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    color: inherit;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s var(--ease-out), color 0.15s var(--ease-out), border-color 0.15s var(--ease-out);
+  }
+  .hint-btn:hover { border-color: var(--primary); color: var(--primary-text); }
+  .hint-btn[aria-expanded="true"] { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+  .hint {
+    display: grid;
+    grid-template-rows: minmax(0, 0fr);
+    transition: grid-template-rows 0.36s var(--ease-out);
+  }
+  .hint.is-open { grid-template-rows: minmax(0, 1fr); }
+  .hint-inner { min-height: 0; overflow: hidden; }
+  .hint-body { margin-top: var(--sp-sm); padding-top: var(--sp-sm); border-top: 1px solid var(--hairline); }
+  .hint-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: var(--body);
+    margin-bottom: var(--sp-xxs);
+  }
+  .hint-text { font-family: var(--font-serif); font-size: clamp(21px, 3.6vw, 28px); line-height: 1.35; }
+  .hint.is-verse .hint-text { font-size: clamp(18px, 2.6vw, 22px); line-height: 1.6; }
+  .popup-actions { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-xxs); margin-top: var(--sp-md); }
+  .popup-step { display: inline-flex; align-items: center; gap: var(--sp-xxs); }
+  .popup-pos { font-size: 13px; color: var(--body); min-width: 4.5em; text-align: center; }
+  .popup-close {
+    padding: 12px var(--sp-sm);
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    color: inherit;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .popup-close:hover { border-color: var(--primary); color: var(--primary-text); }
 
   @media (max-width: 420px) {
+    .panel-nav { flex-wrap: nowrap; }
+    .panel-nav .segmented button { padding: 10px 12px; }
     .theme-grid { grid-template-columns: 1fr 1fr; }
     .verse-grid { grid-template-columns: 1fr; }
   }
@@ -212,26 +347,30 @@
   <header class="page-head">
     <div class="head-top">
       <div class="eyebrow">Progress &amp; Perfection</div>
+      <div class="head-actions">
+      <a class="wheel-link" href="/verse-wheel/">Verse Wheel</a>
       <button type="button" class="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false">
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
       </button>
+      </div>
     </div>
     <h1>Scripture Memory Challenge</h1>
     <p>One passage, every week, all year.</p>
-    <div class="view-toggle" role="group" aria-label="View mode">
-      <span class="is-active" aria-current="page">Flashcards</span>
-      <div class="divider"></div>
-      <a href="/verse-wheel/">Verse Wheel</a>
-    </div>
   </header>
 
   <main>
     <div>
+      <div class="mode-row">
+        <div class="segmented" role="group" aria-label="Verse card style">
+          <button type="button" data-mode="popup" class="is-active" aria-pressed="true">Pop-up</button>
+          <button type="button" data-mode="inline" aria-pressed="false">Inline</button>
+        </div>
+      </div>
       <div class="panel-toolbar" id="gridToolbar">
-        <div class="panel-nav">
-          <button type="button" class="back-link is-active" disabled>All Themes</button>
-          <button type="button" class="back-link" id="allVersesBtn">All Verses</button>
+        <div class="segmented" role="group" aria-label="Browse">
+          <button type="button" class="is-active" disabled>All Themes</button>
+          <button type="button" id="allVersesBtn">All Verses</button>
         </div>
       </div>
       <div class="theme-grid" id="themeGrid"></div>
@@ -280,6 +419,37 @@
   <p class="translation-notice">Unless noted otherwise, verses are quoted from The Holy Bible, English Standard Version&reg; (ESV&reg;), copyright &copy; 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. Some passages are quoted from the New International Version&reg; (NIV&reg;), copyright &copy; 1973, 1978, 1984, 2011 by Biblica, Inc.&trade; Used by permission.</p>
 
 </div>
+
+<dialog class="popup" aria-labelledby="popup-anchor">
+  <div class="popup-card">
+    <div class="popup-top"></div>
+    <div class="popup-body">
+      <div class="popup-eyebrow"></div>
+      <h2 class="popup-anchor" id="popup-anchor"></h2>
+      <div class="popup-ref"></div>
+      <div class="reveal-btns">
+        <button type="button" class="hint-btn" data-reveal="hint" aria-expanded="false" aria-controls="popup-hint">Show hint</button>
+        <button type="button" class="hint-btn" data-reveal="verse" aria-expanded="false" aria-controls="popup-hint">Show verse</button>
+      </div>
+      <div class="hint" id="popup-hint" inert>
+        <div class="hint-inner">
+          <div class="hint-body">
+            <div class="hint-label"></div>
+            <p class="hint-text"></p>
+          </div>
+        </div>
+      </div>
+      <div class="popup-actions">
+        <div class="popup-step">
+          <button type="button" class="nav-link" data-step="-1" aria-label="Previous verse">&larr;</button>
+          <span class="popup-pos" aria-live="polite"></span>
+          <button type="button" class="nav-link" data-step="1" aria-label="Next verse">&rarr;</button>
+        </div>
+        <button type="button" class="popup-close" data-act="dismiss">Close</button>
+      </div>
+    </div>
+  </div>
+</dialog>
 
 <script src="verses.js"></script>
 <script>
@@ -350,31 +520,168 @@
     });
   }
 
-  function renderVerseCard(v, accent, sectionName) {
-    const card = document.createElement('button');
-    card.type = 'button';
+  // ---------- card mode: 'popup' or 'inline' ----------
+  let cardMode = 'popup';
+  try { if (localStorage.getItem('cardMode') === 'inline') cardMode = 'inline'; } catch (e) {}
+
+  function closeInlineCards() {
+    panelContainer.querySelectorAll('.verse-card.is-open').forEach(c => {
+      c.classList.remove('is-open');
+      c.querySelector('.verse-head').setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  const modeBtns = document.querySelectorAll('[data-mode]');
+  function setMode(mode) {
+    cardMode = mode;
+    try { localStorage.setItem('cardMode', mode); } catch (e) {}
+    closeInlineCards();
+    modeBtns.forEach(b => {
+      const on = b.dataset.mode === mode;
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-pressed', String(on));
+    });
+  }
+  modeBtns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+  setMode(cardMode);
+
+  function renderVerseCard(item, items) {
+    const { v, accent, sectionName } = item;
+    const card = document.createElement('div');
     card.className = 'verse-card';
-    card.setAttribute('aria-expanded', 'false');
     card.style.setProperty('--accent', accent);
     card.innerHTML = `
-      <div class="verse-top"></div>
-      <div class="verse-date">${v.date}${sectionName ? ` <span class="verse-section">&middot; ${sectionName}</span>` : ''}</div>
-      <div class="verse-anchor">${v.anchor}<span class="ref">${v.ref}</span></div>
-      <div class="verse-text-inner"><div class="verse-text">${v.words.join(' ')}</div></div>
+      <button type="button" class="verse-head" aria-expanded="false">
+        <div class="verse-top"></div>
+        <div class="verse-date">${v.date}${sectionName ? ` <span class="verse-section">&middot; ${sectionName}</span>` : ''}</div>
+        <div class="verse-anchor">${v.anchor}<span class="ref">${v.ref}</span></div>
+      </button>
+      <div class="verse-text-inner"><div class="verse-text">
+        <p class="verse-snippet"></p>
+        <button type="button" class="hint-btn" aria-expanded="false">Show verse</button>
+      </div></div>
     `;
-    card.addEventListener('click', () => {
+    const head = card.querySelector('.verse-head');
+    const snippet = card.querySelector('.verse-snippet');
+    const toggle = card.querySelector('.hint-btn');
+    const fullText = v.words.join(' ');
+
+    // Inline cards open on the first five words; the button swaps in the full verse.
+    function setFull(full) {
+      snippet.textContent = full ? fullText : firstWords(fullText, HINT_WORDS);
+      toggle.setAttribute('aria-expanded', String(full));
+      toggle.textContent = full ? 'Show hint' : 'Show verse';
+    }
+    setFull(false);
+    toggle.addEventListener('click', () => setFull(toggle.getAttribute('aria-expanded') !== 'true'));
+
+    head.addEventListener('click', () => {
+      if (cardMode === 'popup') {
+        showVerse(items, items.indexOf(item));
+        return;
+      }
       const wasOpen = card.classList.contains('is-open');
-      panelContainer.querySelectorAll('.verse-card.is-open').forEach(c => {
-        c.classList.remove('is-open');
-        c.setAttribute('aria-expanded', 'false');
-      });
+      closeInlineCards();
       if (!wasOpen) {
+        setFull(false);
         card.classList.add('is-open');
-        card.setAttribute('aria-expanded', 'true');
+        head.setAttribute('aria-expanded', 'true');
       }
     });
     return card;
   }
+
+  // ---------- verse popup ----------
+  const HINT_WORDS = 5;
+  const dlg = document.querySelector('.popup');
+  const revealBtns = dlg.querySelectorAll('[data-reveal]');
+  const hintEl = dlg.querySelector('.hint');
+  let shown = null;
+  let lastCard = null;
+  let list = [];
+  let pos = 0;
+  let revealMode = 'hint';
+  const stepBtns = dlg.querySelectorAll('[data-step]');
+
+  function firstWords(text, n) {
+    const words = text.trim().split(/\s+/);
+    return words.slice(0, n).join(' ') + (words.length > n ? '…' : '');
+  }
+
+  // One panel, two contents: the first five words, or the whole verse.
+  // Pressing the active button again hides it.
+  function setReveal(mode) {
+    revealMode = mode;
+    const open = mode === 'hint' || mode === 'verse';
+    if (open && shown) {
+      const text = shown.words.join(' ');
+      dlg.querySelector('.hint-label').textContent = mode === 'hint' ? 'First five words' : 'Full verse · ' + (shown.translation || 'ESV');
+      dlg.querySelector('.hint-text').textContent = mode === 'hint' ? firstWords(text, HINT_WORDS) : text;
+    }
+    hintEl.classList.toggle('is-open', open);
+    hintEl.classList.toggle('is-verse', mode === 'verse');
+    hintEl.inert = !open;
+    revealBtns.forEach(btn => {
+      const on = btn.dataset.reveal === mode;
+      btn.setAttribute('aria-expanded', String(on));
+      btn.textContent = (on ? 'Hide ' : 'Show ') + btn.dataset.reveal;
+    });
+  }
+
+  function fill(i) {
+    const { v, accent, sectionName } = list[i];
+    pos = i;
+    shown = v;
+    dlg.querySelector('.popup-card').style.setProperty('--accent', accent);
+    dlg.querySelector('.popup-eyebrow').textContent = v.date + (sectionName ? ' · ' + sectionName : '');
+    dlg.querySelector('.popup-anchor').textContent = v.anchor;
+    dlg.querySelector('.popup-ref').textContent = v.ref;
+    dlg.querySelector('.popup-pos').textContent = (i + 1) + ' of ' + list.length;
+    stepBtns.forEach(b => { b.disabled = i + Number(b.dataset.step) < 0 || i + Number(b.dataset.step) >= list.length; });
+    setReveal(revealMode);               // arrows keep the current hint / verse / hidden choice
+  }
+
+  function step(d) {
+    const i = pos + d;
+    if (i >= 0 && i < list.length) fill(i);
+  }
+
+  function showVerse(items, i) {
+    if (dlg.open) return;
+    list = items;
+    lastCard = document.activeElement;
+    revealMode = 'hint';                 // a fresh pop-up opens on the hint
+    fill(i);
+    dlg.showModal();
+    void dlg.offsetWidth;                // commit the start state so the transition runs
+    dlg.classList.add('is-in');
+  }
+
+  function dismiss() {
+    if (!dlg.open) return;
+    dlg.classList.remove('is-in');
+    const done = () => {
+      if (dlg.open) dlg.close();
+      const c = panelContainer.querySelectorAll('.verse-head')[pos];
+      if (c) c.focus({ preventScroll: true });
+      else if (lastCard && lastCard.isConnected) lastCard.focus({ preventScroll: true });
+    };
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) done();
+    else setTimeout(done, 240);
+  }
+
+  revealBtns.forEach(btn => btn.addEventListener('click', () => {
+    setReveal(btn.getAttribute('aria-expanded') === 'true' ? null : btn.dataset.reveal);
+  }));
+  dlg.addEventListener('click', e => {
+    if (e.target === dlg || e.target.closest('[data-act="dismiss"]')) dismiss();
+  });
+  stepBtns.forEach(b => b.addEventListener('click', () => step(Number(b.dataset.step))));
+  dlg.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') step(-1);
+    else if (e.key === 'ArrowRight') step(1);
+  });
+  dlg.addEventListener('cancel', e => { e.preventDefault(); dismiss(); });
 
   function openTheme(si) {
     const section = sections[si];
@@ -390,8 +697,10 @@
       <div class="panel-toolbar">
         <div class="panel-nav">
           <button type="button" class="nav-link nav-prev" aria-label="Previous theme"${prev === null ? ' disabled' : ''}>&larr;</button>
-          <button type="button" class="back-link" data-action="all-themes">All Themes</button>
-          <button type="button" class="back-link" data-action="all-verses">All Verses</button>
+          <div class="segmented" role="group" aria-label="Browse">
+            <button type="button" data-action="all-themes">All Themes</button>
+            <button type="button" data-action="all-verses">All Verses</button>
+          </div>
           <button type="button" class="nav-link nav-next" aria-label="Next theme"${next === null ? ' disabled' : ''}>&rarr;</button>
         </div>
       </div>
@@ -402,7 +711,8 @@
     `;
 
     const grid = panel.querySelector('.verse-grid');
-    section.verses.forEach(v => grid.appendChild(renderVerseCard(v, accent)));
+    const items = section.verses.map(v => ({ v, accent, sectionName: '' }));
+    items.forEach(it => grid.appendChild(renderVerseCard(it, items)));
 
     panel.querySelector('[data-action="all-themes"]').addEventListener('click', closeTheme);
     panel.querySelector('[data-action="all-verses"]').addEventListener('click', openAllVerses);
@@ -422,8 +732,10 @@
     panel.innerHTML = `
       <div class="panel-toolbar">
         <div class="panel-nav">
-          <button type="button" class="back-link" data-action="all-themes">All Themes</button>
-          <button type="button" class="back-link is-active" disabled>All Verses</button>
+          <div class="segmented" role="group" aria-label="Browse">
+            <button type="button" data-action="all-themes">All Themes</button>
+            <button type="button" class="is-active" disabled>All Verses</button>
+          </div>
         </div>
       </div>
       <div class="panel-header">
@@ -433,10 +745,11 @@
     `;
 
     const grid = panel.querySelector('.verse-grid');
-    VERSES.forEach(v => {
+    const items = VERSES.map(v => {
       const si = sectionIndexBySlug[v.slug];
-      grid.appendChild(renderVerseCard(v, themeColor(si), sections[si].name));
+      return { v, accent: themeColor(si), sectionName: sections[si].name };
     });
+    items.forEach(it => grid.appendChild(renderVerseCard(it, items)));
 
     panel.querySelector('[data-action="all-themes"]').addEventListener('click', closeTheme);
 
