@@ -32,6 +32,7 @@
   .head-actions { display: flex; align-items: center; gap: var(--sp-xxs); }
   .wheel-link {
     display: inline-flex;
+    white-space: nowrap;
     align-items: center;
     height: 40px;
     padding: 0 18px;
@@ -145,13 +146,18 @@
     border-radius: var(--r-lg);
     box-shadow: var(--shadow-sm);
     overflow: hidden;
+    transition: border-color 0.2s ease, transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+  }
+  .verse-head {
     display: block;
     width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
     text-align: left;
     font: inherit;
     color: inherit;
     cursor: pointer;
-    transition: border-color 0.2s ease, transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
   }
   .verse-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
   .verse-card.is-open { border-color: var(--accent); box-shadow: var(--shadow-md); }
@@ -211,12 +217,16 @@
   .verse-text-inner > .verse-text { min-height: 0; overflow: hidden; }
   .verse-text {
     padding: var(--sp-xs);
+    border-top: 1px solid var(--hairline);
+  }
+  .verse-snippet {
     font-family: var(--font-serif);
     font-size: 17px;
     line-height: 1.65;
     color: var(--body);
-    border-top: 1px solid var(--hairline);
+    margin-bottom: var(--sp-xs);
   }
+  .verse-text .hint-btn { padding: 8px var(--sp-xs); }
   .mode-row { margin-bottom: var(--sp-xs); }
 
   /* ---------- verse popup (same pattern as the Verse Wheel result card) ---------- */
@@ -324,6 +334,8 @@
   .popup-close:hover { border-color: var(--primary); color: var(--primary-text); }
 
   @media (max-width: 420px) {
+    .panel-nav { flex-wrap: nowrap; }
+    .panel-nav .segmented button { padding: 10px 12px; }
     .theme-grid { grid-template-columns: 1fr 1fr; }
     .verse-grid { grid-template-columns: 1fr; }
   }
@@ -515,7 +527,7 @@
   function closeInlineCards() {
     panelContainer.querySelectorAll('.verse-card.is-open').forEach(c => {
       c.classList.remove('is-open');
-      c.setAttribute('aria-expanded', 'false');
+      c.querySelector('.verse-head').setAttribute('aria-expanded', 'false');
     });
   }
 
@@ -535,18 +547,35 @@
 
   function renderVerseCard(item, items) {
     const { v, accent, sectionName } = item;
-    const card = document.createElement('button');
-    card.type = 'button';
+    const card = document.createElement('div');
     card.className = 'verse-card';
-    card.setAttribute('aria-expanded', 'false');
     card.style.setProperty('--accent', accent);
     card.innerHTML = `
-      <div class="verse-top"></div>
-      <div class="verse-date">${v.date}${sectionName ? ` <span class="verse-section">&middot; ${sectionName}</span>` : ''}</div>
-      <div class="verse-anchor">${v.anchor}<span class="ref">${v.ref}</span></div>
-      <div class="verse-text-inner"><div class="verse-text">${v.words.join(' ')}</div></div>
+      <button type="button" class="verse-head" aria-expanded="false">
+        <div class="verse-top"></div>
+        <div class="verse-date">${v.date}${sectionName ? ` <span class="verse-section">&middot; ${sectionName}</span>` : ''}</div>
+        <div class="verse-anchor">${v.anchor}<span class="ref">${v.ref}</span></div>
+      </button>
+      <div class="verse-text-inner"><div class="verse-text">
+        <p class="verse-snippet"></p>
+        <button type="button" class="hint-btn" aria-expanded="false">Show verse</button>
+      </div></div>
     `;
-    card.addEventListener('click', () => {
+    const head = card.querySelector('.verse-head');
+    const snippet = card.querySelector('.verse-snippet');
+    const toggle = card.querySelector('.hint-btn');
+    const fullText = v.words.join(' ');
+
+    // Inline cards open on the first five words; the button swaps in the full verse.
+    function setFull(full) {
+      snippet.textContent = full ? fullText : firstWords(fullText, HINT_WORDS);
+      toggle.setAttribute('aria-expanded', String(full));
+      toggle.textContent = full ? 'Show hint' : 'Show verse';
+    }
+    setFull(false);
+    toggle.addEventListener('click', () => setFull(toggle.getAttribute('aria-expanded') !== 'true'));
+
+    head.addEventListener('click', () => {
       if (cardMode === 'popup') {
         showVerse(items, items.indexOf(item));
         return;
@@ -554,8 +583,9 @@
       const wasOpen = card.classList.contains('is-open');
       closeInlineCards();
       if (!wasOpen) {
+        setFull(false);
         card.classList.add('is-open');
-        card.setAttribute('aria-expanded', 'true');
+        head.setAttribute('aria-expanded', 'true');
       }
     });
     return card;
@@ -570,6 +600,7 @@
   let lastCard = null;
   let list = [];
   let pos = 0;
+  let revealMode = 'hint';
   const stepBtns = dlg.querySelectorAll('[data-step]');
 
   function firstWords(text, n) {
@@ -580,6 +611,7 @@
   // One panel, two contents: the first five words, or the whole verse.
   // Pressing the active button again hides it.
   function setReveal(mode) {
+    revealMode = mode;
     const open = mode === 'hint' || mode === 'verse';
     if (open && shown) {
       const text = shown.words.join(' ');
@@ -606,7 +638,7 @@
     dlg.querySelector('.popup-ref').textContent = v.ref;
     dlg.querySelector('.popup-pos').textContent = (i + 1) + ' of ' + list.length;
     stepBtns.forEach(b => { b.disabled = i + Number(b.dataset.step) < 0 || i + Number(b.dataset.step) >= list.length; });
-    setReveal('hint');                   // each verse opens on the hint, not the full verse
+    setReveal(revealMode);               // arrows keep the current hint / verse / hidden choice
   }
 
   function step(d) {
@@ -618,6 +650,7 @@
     if (dlg.open) return;
     list = items;
     lastCard = document.activeElement;
+    revealMode = 'hint';                 // a fresh pop-up opens on the hint
     fill(i);
     dlg.showModal();
     void dlg.offsetWidth;                // commit the start state so the transition runs
@@ -629,7 +662,7 @@
     dlg.classList.remove('is-in');
     const done = () => {
       if (dlg.open) dlg.close();
-      const c = panelContainer.querySelectorAll('.verse-card')[pos];
+      const c = panelContainer.querySelectorAll('.verse-head')[pos];
       if (c) c.focus({ preventScroll: true });
       else if (lastCard && lastCard.isConnected) lastCard.focus({ preventScroll: true });
     };
