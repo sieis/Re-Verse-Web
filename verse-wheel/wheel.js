@@ -5,8 +5,12 @@
   }
 
   const SESSION_KEY = 'reverse-wheel-session-v1';
-  /* Same palette the library's flashcard view uses, one color per section. */
-  const SECTION_COLORS = ['#da291c', '#1f7a8c', '#b06a0a', '#7a3fa0', '#2d7048', '#b8307a', '#2855a8'];
+  /* Section colors come from the CSS tokens (--sec-1 … --sec-7 in styles.css), the
+     same ones the library uses. DOM elements reference them as var(--sec-N) so they
+     follow the theme automatically; the canvas resolves them at draw time. */
+  const SECTION_COLOR_COUNT = 7;
+  const secVar = (i) => `var(--sec-${(i % SECTION_COLOR_COUNT) + 1})`;
+  const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   /* Spin-time options: duration -> full turns before landing (fewer turns at
      shorter times so it stays readable, but always enough to pass every slice). */
   const SPEEDS = { 1000: [2, 3], 3000: [3, 5], 6000: [5, 7] };
@@ -23,13 +27,14 @@
       ref: v.ref,
       text: v.words.join(' '),
       section: v.section,
-      color: SECTION_COLORS[sectionIndex.get(v.section) % SECTION_COLORS.length]
+      ci: sectionIndex.get(v.section),
+      color: secVar(sectionIndex.get(v.section))
     };
   });
   const byId = new Map(verses.map((v, i) => [v.id, i]));
   const sections = [...sectionIndex.keys()].map((name) => ({
     name,
-    color: SECTION_COLORS[sectionIndex.get(name) % SECTION_COLORS.length],
+    color: secVar(sectionIndex.get(name)),
     verses: verses.filter((v) => v.section === name)
   }));
   const MIN_ACTIVE = 2;   // a wheel needs at least two verses to be worth spinning
@@ -135,6 +140,10 @@
     const hubR = R * 0.17;
     const step = (Math.PI * 2) / N;
     const start = -Math.PI / 2;
+    const palette = Array.from({ length: SECTION_COLOR_COUNT }, (_, i) => cssVar(`--sec-${i + 1}`));
+    const gap = cssVar('--wheel-gap');
+    const shade = cssVar('--wheel-shade');
+    const labelColor = cssVar('--wheel-text');
 
     active.forEach((v, i) => {
       const a0 = start + i * step;
@@ -143,14 +152,14 @@
       ctx.moveTo(c, c);
       ctx.arc(c, c, R, a0, a1);
       ctx.closePath();
-      ctx.fillStyle = v.color;
+      ctx.fillStyle = palette[v.ci % SECTION_COLOR_COUNT];
       ctx.fill();
       if (i % 2) {            // alternate shading so neighbours in one section stay distinct
-        ctx.fillStyle = 'rgba(0,0,0,0.14)';
+        ctx.fillStyle = shade;
         ctx.fill();
       }
       ctx.lineWidth = 1.5;
-      ctx.strokeStyle = '#181818';
+      ctx.strokeStyle = gap;
       ctx.stroke();
     });
 
@@ -165,7 +174,7 @@
       ctx.font = `600 ${fs}px ${family}`;
     }
 
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = labelColor;
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
     active.forEach((v, i) => {
@@ -228,7 +237,7 @@
   function setReadout(v, { label, mode }) {
     readout.classList.toggle('is-idle', mode === 'idle');
     readout.classList.toggle('is-spinning', mode === 'spinning');
-    readout.style.setProperty('--accent', v ? v.color : 'var(--hairline)');
+    readout.style.setProperty('--accent', v ? v.color : 'var(--hairline-strong)');
     if (label != null) readoutLabel.textContent = label;
     readoutRef.textContent = v ? v.ref : 'Press spin';
 
@@ -644,6 +653,7 @@
 
     drawWheel();
     new ResizeObserver(drawWheel).observe(canvas);
+    window.addEventListener('themechange', drawWheel);   // repaint the canvas with the new theme's tokens
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawWheel);
 
     /* A result stays up until dismissed, even across a refresh or a trip Home. */
