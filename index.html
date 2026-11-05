@@ -136,14 +136,10 @@
     transition: border-color 0.2s ease, transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
   }
   .verse-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-  .verse-card.is-open { border-color: var(--accent); box-shadow: var(--shadow-md); }
-  .verse-card.is-open .verse-top { height: 14px; }
-
   .verse-top {
     height: 84px;
     background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 62%, white));
     position: relative;
-    transition: height 0.32s ease;
   }
   .verse-top::after {
     content: "";
@@ -154,9 +150,7 @@
     height: 3px;
     border-radius: 2px;
     background: rgba(255,255,255,0.7);
-    transition: opacity 0.2s ease;
   }
-  .verse-card.is-open .verse-top::after { opacity: 0; }
   .verse-date {
     padding: var(--sp-xs) var(--sp-xs) 0;
     font-size: 11px;
@@ -181,24 +175,107 @@
     margin-top: 2px;
   }
 
-  /* CSS-only accordion via grid-template-rows; minmax(0, …) required so the
-     closed row doesn't floor at one line of text (plain 0fr = minmax(auto,0fr)). */
-  .verse-text-inner {
+  /* ---------- verse popup (same pattern as the Verse Wheel result card) ---------- */
+  .popup {
+    border: none;
+    background: transparent;
+    color: var(--ink);
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    padding: var(--sp-sm);
+    overflow-y: auto;
+  }
+  .popup[open] { display: flex; }
+  .popup::backdrop {
+    background: var(--overlay);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    transition: opacity 0.25s var(--ease-out);
+  }
+  .popup.is-in::backdrop { opacity: 1; }
+  .popup-card {
+    width: 100%;
+    max-width: 640px;
+    margin: auto;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-xl);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+    transition: opacity 0.26s var(--ease-out), transform 0.38s var(--ease-out);
+  }
+  .popup.is-in .popup-card { opacity: 1; transform: none; }
+  .popup-top {
+    height: 72px;
+    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 62%, white));
+  }
+  .popup-body { padding: var(--sp-lg); }
+  .popup-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: var(--body);
+    margin-bottom: var(--sp-xxs);
+  }
+  .popup-anchor {
+    font-family: var(--font-serif);
+    font-size: clamp(30px, 6vw, 44px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.4px;
+  }
+  .popup-ref { margin-top: 4px; font-size: 15px; color: var(--body); }
+  .reveal-btns { display: flex; flex-wrap: wrap; gap: var(--sp-xxs); margin-top: var(--sp-sm); }
+  .hint-btn {
+    padding: 10px var(--sp-xs);
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    color: inherit;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s var(--ease-out), color 0.15s var(--ease-out), border-color 0.15s var(--ease-out);
+  }
+  .hint-btn:hover { border-color: var(--primary); color: var(--primary-text); }
+  .hint-btn[aria-expanded="true"] { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+  .hint {
     display: grid;
     grid-template-rows: minmax(0, 0fr);
-    overflow: hidden;
-    transition: grid-template-rows 0.32s ease;
+    transition: grid-template-rows 0.36s var(--ease-out);
   }
-  .verse-card.is-open .verse-text-inner { grid-template-rows: minmax(0, 1fr); }
-  .verse-text-inner > .verse-text { min-height: 0; overflow: hidden; }
-  .verse-text {
-    padding: var(--sp-xs);
-    font-family: var(--font-serif);
-    font-size: 17px;
-    line-height: 1.65;
+  .hint.is-open { grid-template-rows: minmax(0, 1fr); }
+  .hint-inner { min-height: 0; overflow: hidden; }
+  .hint-body { margin-top: var(--sp-sm); padding-top: var(--sp-sm); border-top: 1px solid var(--hairline); }
+  .hint-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
     color: var(--body);
-    border-top: 1px solid var(--hairline);
+    margin-bottom: var(--sp-xxs);
   }
+  .hint-text { font-family: var(--font-serif); font-size: clamp(21px, 3.6vw, 28px); line-height: 1.35; }
+  .hint.is-verse .hint-text { font-size: clamp(18px, 2.6vw, 22px); line-height: 1.6; }
+  .popup-actions { display: flex; justify-content: flex-end; margin-top: var(--sp-md); }
+  .popup-close {
+    padding: 12px var(--sp-sm);
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    color: inherit;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .popup-close:hover { border-color: var(--primary); color: var(--primary-text); }
 
   @media (max-width: 420px) {
     .theme-grid { grid-template-columns: 1fr 1fr; }
@@ -281,6 +358,32 @@
 
 </div>
 
+<dialog class="popup" aria-labelledby="popup-anchor">
+  <div class="popup-card">
+    <div class="popup-top"></div>
+    <div class="popup-body">
+      <div class="popup-eyebrow"></div>
+      <h2 class="popup-anchor" id="popup-anchor"></h2>
+      <div class="popup-ref"></div>
+      <div class="reveal-btns">
+        <button type="button" class="hint-btn" data-reveal="hint" aria-expanded="false" aria-controls="popup-hint">Show hint</button>
+        <button type="button" class="hint-btn" data-reveal="verse" aria-expanded="false" aria-controls="popup-hint">Show verse</button>
+      </div>
+      <div class="hint" id="popup-hint" inert>
+        <div class="hint-inner">
+          <div class="hint-body">
+            <div class="hint-label"></div>
+            <p class="hint-text"></p>
+          </div>
+        </div>
+      </div>
+      <div class="popup-actions">
+        <button type="button" class="popup-close" data-act="dismiss">Close</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
 <script src="verses.js"></script>
 <script>
   const structuredData = {
@@ -354,27 +457,81 @@
     const card = document.createElement('button');
     card.type = 'button';
     card.className = 'verse-card';
-    card.setAttribute('aria-expanded', 'false');
+    card.setAttribute('aria-haspopup', 'dialog');
     card.style.setProperty('--accent', accent);
     card.innerHTML = `
       <div class="verse-top"></div>
       <div class="verse-date">${v.date}${sectionName ? ` <span class="verse-section">&middot; ${sectionName}</span>` : ''}</div>
       <div class="verse-anchor">${v.anchor}<span class="ref">${v.ref}</span></div>
-      <div class="verse-text-inner"><div class="verse-text">${v.words.join(' ')}</div></div>
     `;
-    card.addEventListener('click', () => {
-      const wasOpen = card.classList.contains('is-open');
-      panelContainer.querySelectorAll('.verse-card.is-open').forEach(c => {
-        c.classList.remove('is-open');
-        c.setAttribute('aria-expanded', 'false');
-      });
-      if (!wasOpen) {
-        card.classList.add('is-open');
-        card.setAttribute('aria-expanded', 'true');
-      }
-    });
+    card.addEventListener('click', () => showVerse(v, accent, sectionName));
     return card;
   }
+
+  // ---------- verse popup ----------
+  const HINT_WORDS = 5;
+  const dlg = document.querySelector('.popup');
+  const revealBtns = dlg.querySelectorAll('[data-reveal]');
+  const hintEl = dlg.querySelector('.hint');
+  let shown = null;
+  let lastCard = null;
+
+  function firstWords(text, n) {
+    const words = text.trim().split(/\s+/);
+    return words.slice(0, n).join(' ') + (words.length > n ? '…' : '');
+  }
+
+  // One panel, two contents: the first five words, or the whole verse.
+  // Pressing the active button again hides it.
+  function setReveal(mode) {
+    const open = mode === 'hint' || mode === 'verse';
+    if (open && shown) {
+      const text = shown.words.join(' ');
+      dlg.querySelector('.hint-label').textContent = mode === 'hint' ? 'First five words' : 'Full verse · ' + (shown.translation || 'ESV');
+      dlg.querySelector('.hint-text').textContent = mode === 'hint' ? firstWords(text, HINT_WORDS) : text;
+    }
+    hintEl.classList.toggle('is-open', open);
+    hintEl.classList.toggle('is-verse', mode === 'verse');
+    hintEl.inert = !open;
+    revealBtns.forEach(btn => {
+      const on = btn.dataset.reveal === mode;
+      btn.setAttribute('aria-expanded', String(on));
+      btn.textContent = (on ? 'Hide ' : 'Show ') + btn.dataset.reveal;
+    });
+  }
+
+  function showVerse(v, accent, sectionName) {
+    if (dlg.open) return;
+    lastCard = document.activeElement;
+    shown = v;
+    dlg.querySelector('.popup-card').style.setProperty('--accent', accent);
+    dlg.querySelector('.popup-eyebrow').textContent = v.date + (sectionName ? ' · ' + sectionName : '');
+    dlg.querySelector('.popup-anchor').textContent = v.anchor;
+    dlg.querySelector('.popup-ref').textContent = v.ref;
+    setReveal('hint');                   // opens on the hint, not the full verse
+    dlg.showModal();
+    void dlg.offsetWidth;                // commit the start state so the transition runs
+    dlg.classList.add('is-in');
+  }
+
+  function dismiss() {
+    if (!dlg.open) return;
+    dlg.classList.remove('is-in');
+    const done = () => {
+      if (dlg.open) dlg.close();
+      if (lastCard && lastCard.isConnected) lastCard.focus({ preventScroll: true });
+    };
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) done();
+    else setTimeout(done, 240);
+  }
+
+  revealBtns.forEach(btn => btn.addEventListener('click', () => {
+    setReveal(btn.getAttribute('aria-expanded') === 'true' ? null : btn.dataset.reveal);
+  }));
+  dlg.addEventListener('click', e => {
+    if (e.target === dlg || e.target.closest('[data-act="dismiss"]')) dismiss();
+  });
+  dlg.addEventListener('cancel', e => { e.preventDefault(); dismiss(); });
 
   function openTheme(si) {
     const section = sections[si];
