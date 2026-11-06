@@ -267,6 +267,7 @@
     state.spinning = true;
     spinBtn.disabled = true;
     resetBtn.disabled = true;
+    disarmReset();
     spinBtn.textContent = 'Spinning…';
     live.textContent = 'Spinning.';
     renderEditors();
@@ -559,7 +560,7 @@
       modeNote.textContent = `No verse repeats until all ${N} have come up. ${left} left in round ${state.round}.`;
     }
 
-    resetBtn.disabled = state.spinning || (state.spins === 0);
+    resetBtn.disabled = state.spinning || (state.spins === 0 && state.removed.size === 0);
     renderEditors();
   }
 
@@ -584,10 +585,9 @@
     state.spins = 0;
     state.last = null;
     state.pending = null;
-    saveSession();
+    state.removed.clear();            // a fresh session puts every verse back on the wheel
     setReadout(null, { label: 'Ready', mode: 'idle' });
-    live.textContent = 'Session reset.';
-    render();
+    updateWheel('Session reset.');
   });
 
   /* ===== MODE + SPEED ===== */
