@@ -228,5 +228,10 @@ const VERSES = [
     slug: "1-corinthians-13-4-5", date: "Nov 02", section: "Love",
     ref: "1 Corinthians 13:4-5", anchor: "Patience", translation: "ESV",
     words: ["Love","is","patient","and","kind;","love","does","not","envy","or","boast;","it","is","not","arrogant","or","rude.","It","does","not","insist","on","its","own","way;","it","is","not","irritable","or","resentful;"]
+  },
+  {
+    slug: "1-corinthians-13-6-7", date: "Nov 09", section: "Love",
+    ref: "1 Corinthians 13:6-7", anchor: "Endure", translation: "ESV",
+    words: ["it","does","not","rejoice","at","wrongdoing,","but","rejoices","with","the","truth.","Love","bears","all","things,","believes","all","things,","hopes","all","things,","endures","all","things."]
   }
 ];
