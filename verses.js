@@ -233,5 +233,10 @@ const VERSES = [
     slug: "1-corinthians-13-6-7", date: "Nov 09", section: "Love",
     ref: "1 Corinthians 13:6-7", anchor: "Endure", translation: "ESV",
     words: ["it","does","not","rejoice","at","wrongdoing,","but","rejoices","with","the","truth.","Love","bears","all","things,","believes","all","things,","hopes","all","things,","endures","all","things."]
+  },
+  {
+    slug: "matthew-6-14-15", date: "Nov 16", section: "Love",
+    ref: "Matthew 6:14-15", anchor: "Pervade", translation: "ESV",
+    words: ["For","if","you","forgive","others","their","trespasses,","your","heavenly","Father","will","also","forgive","you,","but","if","you","do","not","forgive","others","their","trespasses,","neither","will","your","Father","forgive","your","trespasses."]
   }
 ];
