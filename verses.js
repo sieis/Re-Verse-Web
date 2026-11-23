@@ -238,5 +238,10 @@ const VERSES = [
     slug: "matthew-6-14-15", date: "Nov 16", section: "Love",
     ref: "Matthew 6:14-15", anchor: "Pervade", translation: "ESV",
     words: ["For","if","you","forgive","others","their","trespasses,","your","heavenly","Father","will","also","forgive","you,","but","if","you","do","not","forgive","others","their","trespasses,","neither","will","your","Father","forgive","your","trespasses."]
+  },
+  {
+    slug: "1-peter-4-8", date: "Nov 23", section: "Love",
+    ref: "1 Peter 4:8", anchor: "Coverage", translation: "ESV",
+    words: ["Above","all,","keep","loving","one","another","earnestly,","since","love","covers","a","multitude","of","sins."]
   }
 ];
