@@ -627,7 +627,30 @@ body:has(dialog[open]) { overflow: hidden; }
     </a>
   </footer>
 
-  <p class="translation-notice">Verses are quoted from The Holy Bible, English Standard Version&reg; (ESV&reg;), copyright &copy; 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission.</p>
+  <div class="subscribe">
+    <p class="subscribe-text">Subscribe to Progress and Perfection, a recovery-themed, Christian-flavored daily reflection</p>
+    <script>
+      // Beehiiv creates its iframe asynchronously without an accessible title.
+      // Observe only this container so replacements receive a title as well.
+      (() => {
+        const container = document.currentScript.parentElement;
+        const titleFrames = () => {
+          container.querySelectorAll('iframe').forEach(frame => {
+            if (!frame.title.trim()) {
+              frame.title = 'Subscribe to Progress and Perfection';
+            }
+          });
+        };
+        new MutationObserver(titleFrames).observe(container, {
+          childList: true, subtree: true
+        });
+        titleFrames();
+      })();
+    </script>
+    <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="8a24cf25-a181-44c7-a2c6-5a18144d1e4d"></script>
+  </div>
+
+  <p class="translation-notice">Unless noted otherwise, verses are quoted from The Holy Bible, English Standard Version&reg; (ESV&reg;), copyright &copy; 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. Some passages are quoted from the New International Version&reg; (NIV&reg;), copyright &copy; 1973, 1978, 1984, 2011 by Biblica, Inc.&trade; Used by permission.</p>
 
 </div>
 

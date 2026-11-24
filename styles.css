@@ -354,7 +354,11 @@ footer.social svg { width: 18px; height: 18px; }
 .subscribe iframe {
   display: block;
   width: 100%;
-  border-radius: var(--r-md);   /* Beehiiv paints its own white page inside the frame; rounding makes it a tidy card in dark mode */
+  border-radius: var(--r-md);
+  /* The Beehiiv form is a light-scheme document. If the frame inherits the page's
+     dark color-scheme, the browser paints an opaque white backdrop behind it.
+     Matching the frame to light keeps it transparent. */
+  color-scheme: light;
 }
 .subscribe-text {
   font-size: 13px;
